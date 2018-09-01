@@ -1,0 +1,22 @@
+syntax = "proto3"; //Specify proto3 version.
+
+package work_leave; //Optional: unique package name.
+
+//Service. define the methods that the grpc server can expose to the client.
+service EmployeeLeaveDaysService {
+  rpc Eligible (User) returns (LegalAge);
+}
+
+// Message Type fefinition for an Employee.
+message User {
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
+}
+
+// Message Type definition for LeaveEligibility response.
+message LegalAge {
+  bool eligible = 1;
+}
+
+// Message Type definition for LeaveFeedback response.
