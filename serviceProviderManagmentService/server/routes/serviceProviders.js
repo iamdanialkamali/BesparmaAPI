@@ -1,5 +1,5 @@
 import express from 'express';
-import userCtrl from '../controllers/users';
+import SPCtrl from '../controllers/serviceProvider';
 import auth from '../../config/jwt';
 
 const router = express.Router();
@@ -11,7 +11,7 @@ router.route('/')
   /** POST /api/users - Create new user */
   .post(userCtrl.create);
 
-router.route('/:userId')
+router.route('/:SPId')
   /** GET /api/users/:userId - Get user */
   .get(userCtrl.get)
 
@@ -22,6 +22,6 @@ router.route('/:userId')
   .delete(userCtrl.remove);
 
 /** Load user when API with userId route parameter is hit */
-router.param('userId', userCtrl.load);
+router.param('SPId', SPCtrl.load);
 
 export default router;

@@ -1,18 +1,18 @@
 import jwt from 'jsonwebtoken';
 import config from '../../config/env';
-import User from '../models/user';
+import serviceProvider from '../models/serviceProvider';
 
 function authenticate(req, res, next) {
-    User.findOne({
+    serviceProvider.findOne({
       username: req.body.username
     })
     .exec()
     .then((user) => {
       if (!user) return next();
-      user.comparePassword(req.body.password, (e, isMatch) => {
+      serviceProvider.comparePassword(req.body.password, (e, isMatch) => {
         if (e) return next(e);
         if (isMatch) {
-          req.user = user;
+          req.serviceProvider = serviceProvider;
           next();
         } else {
           return next();

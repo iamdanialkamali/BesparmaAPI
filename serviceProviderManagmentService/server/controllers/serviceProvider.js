@@ -1,10 +1,10 @@
-import User from '../models/user';
+import ServiceProvider from '../models/serviceProvider';
 
 function load(req, res, next, id) {
-  User.findById(id)
+  ServiceProvider.findById(id)
     .exec()
-    .then((user) => {
-      req.dbUser = user;
+    .then((serviceProvider) => {
+      req.dbServiceProvider = serviceProvider;
       return next();
     }, (e) => next(e));
 }
@@ -14,37 +14,37 @@ function get(req, res) {
 }
 
 function create(req, res, next) {
-  User.create({
+  ServiceProvider.create({
       username: req.body.username,
       password: req.body.password
     })
-    .then((savedUser) => {
-      return res.json(savedUser);
+    .then((savedServiceProvider) => {
+      return res.json(savedServiceProvider);
     }, (e) => next(e));
 }
 
 function update(req, res, next) {
-  const user = req.dbUser;
-  Object.assign(user, req.body);
+  const serviceProvider = req.dbServiceProvider;
+  Object.assign(serviceProvider, req.body);
 
-  user.save()
-    .then((savedUser) => res.sendStatus(204),
+  serviceProvider.save()
+    .then((savedServiceProvider) => res.sendStatus(204),
       (e) => next(e));
 }
 
 function list(req, res, next) {
   const { limit = 50, skip = 0 } = req.query;
-  User.find()
+  ServiceProvider.find()
     .skip(skip)
     .limit(limit)
     .exec()
-    .then((users) => res.json(users),
+    .then((ServiceProviders) => res.json(ServiceProviders),
       (e) => next(e));
 }
 
 function remove(req, res, next) {
-  const user = req.dbUser;
-  user.remove()
+  const serviceProvider = req.dbServiceProvider;
+  serviceProvider.remove()
     .then(() => res.sendStatus(204),
       (e) => next(e));
 }
