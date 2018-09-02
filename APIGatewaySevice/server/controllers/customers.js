@@ -1,7 +1,9 @@
-
+import client from '../../config/grpc'
 
 function register(req, res, next) {
-    res.send({msg: 'ok'})
+    client.register({},(err, data)=>{
+        res.
+    })
 }
 
 export default { register }
