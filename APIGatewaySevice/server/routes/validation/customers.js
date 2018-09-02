@@ -33,5 +33,10 @@ export default {
       oldPassword: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required(),
       newPassword: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required()
     }
+  },
+  resetPassword: {
+    body: {
+      password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required()
+    }
   }
 }
