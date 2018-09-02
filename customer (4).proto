@@ -1,0 +1,70 @@
+syntax = "proto3"; //Specify proto3 version.
+
+package Customer; //Optional: unique package name.
+
+//Service. define the methods that the grpc server can expose to the client.
+service customerManagementService {
+  rpc register (newUser) returns (User);
+  rpc login (loginData) returns (response);
+  rpc forgetPassword (forgetpassdata) returns (response);
+  rpc update (updateUser) returns (response);
+  rpc remove (token) returns (response);
+  rpc verify (token) returns (response);
+ // rpc orderService (User) returns (LegalAge);  TODO:   after making  serviceManagemnetService
+ // rpc getApplicant (User) returns (LegalAge);   TODO:   after making  serviceProviderManagemnetService
+  rpc resetPassword (resetData) returns (response);
+  rpc changePassword (passData) returns (response);
+}
+
+// Message Type fefinition for an Employee.
+message User {
+  string fullname = 1;
+  string email = 2;
+  string phonenumber = 3;
+  string username = 4;
+  string status = 5;
+  string token = 6;
+}
+message updateUser {
+  string fullname = 1;
+  string phonenumber = 2;
+  string username = 3;
+
+}
+
+message newUser {
+  string fullname = 1;
+  string email = 2;
+  string phonenumber = 3;
+  string username = 4;
+  string password = 5;
+}
+message loginData{
+  string username = 1;
+  string password = 2;
+}
+
+message forgetpassdata{
+  string email = 1;
+
+}
+// Message Type definition for LeaveEligibility response.
+message response {
+  string status = 1;
+  string message = 2;
+  string token  = 3;
+}
+message token{
+  string token = 1;
+}
+message passData{
+  string oldPassword = 1 ;
+  string newPassword = 2 ;
+  string token = 3 ;
+}
+message resetData{
+  string newPassword = 1;
+  string token = 2;
+}
+
+// Message Type definition for LeaveFeedback response.

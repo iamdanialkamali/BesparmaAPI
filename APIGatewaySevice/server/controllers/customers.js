@@ -2,7 +2,10 @@ import client from '../../config/grpc'
 
 function register(req, res, next) {
     client.register({},(err, data)=>{
-        res.
+        username: req.body.username
+        password: req.body.password
+        email: req.body.email
+        phoneNumber: req.body.phone
     })
 }
 
