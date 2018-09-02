@@ -39,6 +39,6 @@ router.route('/verify/:token')
   .get(validate(validations.userPassValidation), customerCtrl.verify)
 
 router.route('/getMe')
-  .get(customerCtrl.getMe)
+  .get(auth, customerCtrl.getMe)
   
 export default router
