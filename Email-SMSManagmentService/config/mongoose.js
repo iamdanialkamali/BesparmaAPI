@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import config from './env';
-import logger from './log4js';
 
 mongoose.connect(config.mongodb);
 mongoose.connection.on('error', () => {
