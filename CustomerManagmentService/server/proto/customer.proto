@@ -7,7 +7,7 @@ service customerManagementService {
   rpc register (newUser) returns (User);
   rpc login (loginData) returns (response);
   rpc forgetPassword (forgetpassdata) returns (response);
-  rpc update (User) returns (response);
+  rpc update (updateUser) returns (response);
   rpc remove (token) returns (response);
   rpc verify (token) returns (response);
  // rpc orderService (User) returns (LegalAge);  TODO:   after making  serviceManagemnetService
@@ -24,6 +24,12 @@ message User {
   string username = 4;
   string status = 5;
   string token = 6;
+}
+message updateUser {
+  string fullname = 1;
+  string phonenumber = 2;
+  string username = 3;
+
 }
 
 message newUser {

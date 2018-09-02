@@ -1,58 +1,87 @@
 import Customer from '../models/customer';
 import jwt from 'jsonwebtoken';
 import config from '../../config/env';
-import client from '../../redis;'
-import tokengen from '../../config/tokengen'
+import client from '../../config/redis';
+import tokengen from '../../config/tokengen';
 
 
 
-
-
-
-function get(req, res) {
-  return res.json(req.dbUser);
-}
 
 function register(call,callback){
+  console.log(call);
   Customer.create({
-    username: call.username,
-    password: call.body.password,
-    fullname: call.fullname,
-    phonenumber:call.phonenumber,
+    username: call.request.username,
+    password: call.request.password,
+    fullname: call.request.fullname,
+    phonenumber: call.request.phonenumber,
+    email: call.request.email,
     status:'pending'
   })
   .then((savedCustomer) => {
-    callback(savedCustomer)
+    let customerToken = generateToken(savedCustomer);
+    callback(null,{
+       fullname: savedCustomer.fullname,
+       email :savedCustomer.email,
+       phonenumber: savedCustomer.phonenumber,
+       username :savedCustomer.username,
+       status: savedCustomer.status,
+       token : customerToken,
+    });
+    
   });
 }
 function login (call,callback){
   Customer.findOne({
-    username:call.username,
+    username:call.request.username
   }).exec().then((customer)=>{
     if(!customer){
-      callback({
+      callback('username not found',{
         status:'404',
         message:'username not found'
     })}
     else{
-      customer.comparePassword(call.password,(err,isMatch)=>{
+      customer.comparePassword(call.request.password,(err,isMatch)=>{
       if(err){
-        callback({
+        callback('internal error :password matching Problem',{
           status:'500',
-          message:' internal error :password matching Problem'
+          message:'internal error :password matching Problem'
         });
       }else{
         if(isMatch){
-          callback({
+          callback(null,{
             token: generateToken(customer),
             status: '200',
           });
         }
         else{
-          callback({
+          callback(' internal error : Incorrect Password',{
             status:'403',
             message:' internal error : Incorrect Password'
           });
+
+        /*
+          function list(call,callback) {
+            const { limit = 50, skip = 0 } = req.c;
+            Customer.find()
+              .skip(skip)
+              .limit(limit)
+              .exec()
+              .then((users) => res.json(users),
+                (e) => next(e));
+          }
+          
+          function remove(req, res, next) {
+            const user = req.dbUser;
+            user.remov
+              .then(() => res.sendStatus(204),
+                (e) => next(e));
+          }
+          */
+          
+          
+          
+          
+          export default { register, login, update, remove, changePassword,forgetPassword,resetPassword ,verify};
         }
       }
         
@@ -72,71 +101,77 @@ function generateToken(customer) {
     expiresIn: config.jwtDuration,
   };
   const secret = config.jwtSecret;
-  token = jwt.sign(jwtPayload, secret, jwtData);
-  return token
+
+  let token = jwt.sign(jwtPayload, secret, jwtData);
+  return token;
 }
 
 
 function update(call,callback) {
-  let token = call.token;
-  
+  let token = call.request.token;
+  let decoded = null;
   try{
-    let decoded = jwt.verify(token,config.jwtSecret)
+    decoded = jwt.verify(token,config.jwtSecret);
+    console.log(decoded);
+    Customer.findById(decoded.id).exec().then((customer)=>{
+     if(call.request.fullname!= ''){
+        customer.fullname= call.request.fullname;
+     }
+     if(call.request.username!= ''){
+       customer.username = call.request.username;
+
+     }if(call.request.phonenumber!= ''){
+        customer.phonenumber = call.request.phonenumber;
+     }
+      customer.save()
+      .then((savedUser) =>{ 
+        callback(null,{
+        status: '204',
+        message: 'ok',
+        });
+    });
+    });
+    
+    
   }catch(err){
     callback({
       status:'500',
       message:err.message
     });
-  }
-  const customer = Customer.findById(decoded.id)
-  Object.assign(customer, call);
-
-  customer.save()
-    .then((savedUser) =>{ 
-      callback({
-      status: '204',
-      message: 'ok',
-      });
-  });
+}
 }
 
 function remove(call,callback) {
-  let token = call.token;
+  let token = call.request.token;
   try{
     let decoded = jwt.verify(token,config.jwtSecret)
-  }catch(err){
-    callback({
-      status:'500',
-      message:err.message
-    });
-  }
-  const customer = Customer.findById(decoded.id)
-  Object.assign(customer, {status:'deleted'});
-
-  customer.save()
-    .then(() =>{ 
-      callback({
-      status: '204',
-      message: 'ok',
-      });
-  });
   
+    const customer = Customer.findById(decoded.id).exec().then((customer)=>{
+    customer.status = 'deleted'
+
+    customer.save()
+      .then(() =>{ 
+        callback(null,{
+        status: '204',
+        message: 'ok',
+        });
+      });
+    });
+  
+}catch(err){
+  callback({
+    status:'500',
+    message:err.message
+  });}
 }
 
 function changePassword(call,callback){
-  let token = call.token;
+  let token = call.request.token;
   
   try{
 
     let decoded = jwt.verify(token,config.jwtSecret);
-  }
-  catch(err)
-  {
-    callback({
-      status:'500',
-      message:err.message
-    });
-  }
+  
   Customer.findById(decoded.id)
   .exec()
   .then((customer)=>{
@@ -145,9 +180,10 @@ function changePassword(call,callback){
         status:'404',
         message:'user not found',
     });
+    
   }
     else{
-      customer.comparePassword(call.oldPassword,(err,isMatch)=>{
+      customer.comparePassword(call.request.oldPassword,(err,isMatch)=>{
       if(err){
         callback({
           status:'500',
@@ -155,9 +191,9 @@ function changePassword(call,callback){
         });
       }else{
         if(isMatch){
-          customer.password = call.newPassword;
+          customer.password = call.request.newPassword;
           customer.save();
-          callback({
+          callback(null,{
             message:'Password Changed',
             status: '200',
           });
@@ -175,16 +211,24 @@ function changePassword(call,callback){
     }
   });
 }
+catch(err)
+{
+  callback({
+    status:'500',
+    message:err.message
+  });
+}
+}
 
 function forgetPassword(call,callback){
   let token = tokengen.generate();
-  client.set(token,call.email);
+  client.set(token,call.request.email);
+  callback(null,token);
   
 }
 
-
 function resetPassword(call,callback){
-  client.get(call.token,(error, result) => {
+  client.get(call.request.token,(error, result) => {
     if (error) {
       callback({
         status:'404',
@@ -194,8 +238,33 @@ function resetPassword(call,callback){
       Customer.findOne({email:result})
       .exec()
       .then((customer)=>{
+        customer.password = call.request.newPassword;
         customer.status='active';
         customer.save();
+        callback({
+          status:'200',
+          message:'Password Reseted '
+        })
+      });
+    }
+});
+  
+}
+function verify(call,callback){
+  client.get(call.request.token,(error, result) => {
+    if (error) {
+      callback({
+        status:'404',
+        message:'Not Found'
+      })
+    }else{
+      Customer.findOne({email:result})
+      .exec()
+      .then((customer)=>{
+        if(customer.status=='pending'){
+          customer.status='active';
+          customer.save();
+        }
         callback({
           status:'200',
           message:'Password Reseted '
@@ -229,5 +298,4 @@ function remove(req, res, next) {
 
 
 
-
-export default { register, login, update, remove, changePassword,forgetPassword,resetPassword };
+export default { register, login, update, remove, changePassword,forgetPassword,resetPassword ,verify};

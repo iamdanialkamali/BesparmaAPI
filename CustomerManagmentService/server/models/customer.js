@@ -5,7 +5,8 @@ const CustomerSchema = new mongoose.Schema({
   username: {
     type: String, 
     required: true, 
-    trim: true
+    trim: true,
+    unique:true,
   },
   password: { 
     type: String, 
@@ -21,21 +22,17 @@ const CustomerSchema = new mongoose.Schema({
     type: String, 
     required: true, 
     trim: true,
+    unique: true,
   },
   phonenumber:{
     type: String, 
     required: true, 
     trim: true
   },
-  active:{
-    type:boolean,
-    required: true, 
-
-  },
-  isDeleted:{
-    type:Boolean,
-    required:true,
-  },
+  status:{
+    type:String,
+    required: true,
+  }, 
   point:{
     type:Number,
   }
