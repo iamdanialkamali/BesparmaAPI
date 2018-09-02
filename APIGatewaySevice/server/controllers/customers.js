@@ -84,8 +84,8 @@ function update(req, res, next) {
     }
 
     client.update(message, (error, data) => {
-      if (error) res.sendStatus(500)
-      res.status(data.code).send({ message: data.message })
+        if (error) res.sendStatus(500)
+        res.status(data.code).send({ message: data.message })
     })
 }
 
