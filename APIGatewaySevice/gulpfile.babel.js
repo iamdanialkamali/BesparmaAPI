@@ -7,7 +7,8 @@ import del from 'del';
 const plugins = loadPlugins();
 
 const paths = {
-  js: ['./**/*.js', '!dist/**', '!node_modules/**']
+  js: ['./**/*.js', '!dist/**', '!node_modules/**'],
+  proto:['./**/*.proto']
 };
 
 gulp.task('clean', () => {
@@ -20,15 +21,20 @@ gulp.task('babel', () => {
     .pipe(plugins.babel())
     .pipe(gulp.dest('dist'));
 });
+gulp.task('proto', () => {
+  return gulp.src(paths.proto, { base: '.' })
+    .pipe(gulp.dest('dist'));
+});
 
 // Start server with restart on file change events
-gulp.task('nodemon', ['babel'], () =>
+gulp.task('nodemon', ['babel','proto'], () =>
   plugins.nodemon({
     script: path.join('dist', 'index.js'),
     ext: 'js',
     ignore: ['node_modules/**/*.js', 'dist/**/*.js'],
     tasks: ['babel']
-  }).on('start', function() {
+  }
+).on('start', function() {
     console.clear();
    }).on('restart', function() {
     console.clear();

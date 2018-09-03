@@ -1,5 +1,5 @@
 import grpc   from 'grpc'
-import loader from '@grpc/proto-loader'
+const loader = require('@grpc/proto-loader')
 import path   from 'path';
 
 import env    from './env';
