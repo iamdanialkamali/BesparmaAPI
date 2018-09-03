@@ -4,67 +4,89 @@ package Customer; //Optional: unique package name.
 
 //Service. define the methods that the grpc server can expose to the client.
 service customerManagementService {
-  rpc register (newUser) returns (User);
-  rpc login (loginData) returns (response);
-  rpc forgetPassword (forgetpassdata) returns (response);
-  rpc update (updateUser) returns (response);
-  rpc remove (token) returns (response);
-  rpc verify (token) returns (response);
+  rpc register       (RegisterRequest)        returns (RegisterResponse);
+  rpc login          (LoginRequest)           returns (LoginResponse);
+  rpc forgetPassword (ForgetPasswordRequest)  returns (SimpleResponse);
+  rpc update         (UpdateRequest)          returns (SimpleResponse);
+  rpc remove         (SimpleTokenBaseRequest) returns (SimpleResponse);
+  rpc verify         (SimpleTokenBaseRequest) returns (SimpleResponse);
+  rpc resetPassword  (ResetPasswordRequest) returns (SimpleResponse);
+  rpc changePassword (ChangePasswordRequest)  returns (SimpleResponse);
+  
+  rpc getMe          (SimpleTokenBaseRequest) returns (getMeResponse);
+  
  // rpc orderService (User) returns (LegalAge);  TODO:   after making  serviceManagemnetService
  // rpc getApplicant (User) returns (LegalAge);   TODO:   after making  serviceProviderManagemnetService
-  rpc resetPassword (resetData) returns (response);
-  rpc changePassword (passData) returns (response);
+  
 }
 
-// Message Type definition for an Employee.
-message User {
-  string fullname = 1;
-  string email = 2;
-  string phonenumber = 3;
-  string username = 4;
-  string status = 5;
-  string token = 6;
-}
-message updateUser {
-  string fullname = 1;
-  string phonenumber = 2;
-  string username = 3;
 
-}
-
-message newUser {
-  string fullname = 1;
-  string email = 2;
-  string phonenumber = 3;
-  string username = 4;
-  string password = 5;
-}
-message loginData{
-  string username = 1;
-  string password = 2;
-}
-
-message forgetpassdata{
-  string email = 1;
-
-}
-// Message Type definition for LeaveEligibility response.
-message response {
-  string status = 1;
+message SimpleResponse {
+  int32  code    = 1;
   string message = 2;
-  string token  = 3;
 }
-message token{
+
+message SimpleTokenBaseRequest{
   string token = 1;
 }
-message passData{
-  string oldPassword = 1 ;
-  string newPassword = 2 ;
-  string token = 3 ;
+
+message ResetPasswordRequest{
+  string token = 1;
+  string new_password =2;
 }
-message resetData{
-  string newPassword = 1;
-  string token = 2;
+
+message RegisterRequest {
+  string full_name    = 1;
+  string email        = 2;
+  string phone_number = 3;
+  string username     = 4;
+  string password     = 5;
+}
+
+message RegisterResponse {
+  int32  code        = 1;
+  string message     = 2;
+  string token       = 3;
+  string user_status = 4;
+  
+}
+
+message LoginRequest {
+  string username = 1;
+  string password  = 2;
+}
+
+message LoginResponse {
+  int32  code    = 1;
+  string message = 2;
+  string token   = 3;
+}
+
+message ForgetPasswordRequest{
+  string email = 1;
+}
+
+message UpdateRequest {
+  string full_name    = 1;
+  string phone_number = 2;
+  string username     = 3;
+  string token        = 4;
+}
+
+message ChangePasswordRequest {
+  string old_password = 1;
+  string new_password = 2;
+  string token       = 3;
+}
+
+message getMeResponse {
+  int32  code         = 1;
+  string message      = 2;
+  string full_name    = 3;
+  string email        = 4;
+  string phone_number = 5;
+  string username     = 6;
+  string status       = 7;
 }
 
 // Message Type definition for LeaveFeedback response.
