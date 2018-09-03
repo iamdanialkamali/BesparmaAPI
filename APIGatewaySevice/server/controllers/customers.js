@@ -2,13 +2,13 @@ import client from '../../config/grpc'
 
 function register(req, res, next) {
     const message = {
-        full_name : req.body.full_name,
+        fullname : req.body.fullname,
         email: req.body.email,
-        phone_number: req.body.phone_number,
+        phonenumber: req.body.phonenumber,
         username: req.body.username,
         password: req.body.password
     }
-
+    console.log(message)
     client.register(message , (error, data) => {
 
         if (error) res.status(error.code).send(error.message)
@@ -54,9 +54,9 @@ function forgetPassword(req, res, next) {
 function update(req, res, next) {
     const message = {
         id: req.user.id,
-        full_name: req.body.full_name,
+        fullname: req.body.fullname,
         email: req.body.email,
-        phone_number: req.body.phone_number,
+        phonenumber: req.body.phonenumber,
         username: req.body.username
     }
 
@@ -108,8 +108,8 @@ function resetPassword(req, res, next) {
 function changePassword(req, res, next) {
     const message = {
       id          : req.user.id,
-      old_password: req.body.old_password,
-      new_password: req.body.new_password
+      oldpassword: req.body.oldpassword,
+      newpassword: req.body.newpassword
     }
   
     client.changePassword(message, (error, data) => {
@@ -127,9 +127,9 @@ function getMe(req, res, next) {
         if (error) res.status(error.code).send(error.message)
         res.status(data.code).send({ 
             message: data.message,
-            full_name: data.full_name,
+            fullname: data.fullname,
             email: data.email,
-            phone_number: data.phone_number,
+            phonenumber: data.phonenumber,
             username: data.username,
             status: data.status
         })

@@ -9,11 +9,12 @@ import emailClient from '../../config/emailClient'
 
 
 function register(call,callback){
+  console.log(call)
   Customer.create({
     username: call.request.username,
     password: call.request.password,
-    fullname: call.request.full_name,
-    phonenumber: call.request.phone_number,
+    fullname: call.request.fullname,
+    phonenumber: call.request.phonenumber,
     email: call.request.email,
     status:'pending'
   })
@@ -22,7 +23,7 @@ function register(call,callback){
     callback(null,{
        code: 200,
        message: 'Account Created',
-       user_status: savedCustomer.status,
+       userstatus: savedCustomer.status,
        token : customerToken,
     });
     let token = tokengen.generate();
@@ -97,14 +98,14 @@ function update(call,callback) {
     decoded = jwt.verify(token,config.jwtSecret);
     console.log(decoded);
     Customer.findById(decoded.id).exec().then((customer)=>{
-     if(call.request.full_name!= ''){
-        customer.fullname= call.request.full_name;
+     if(call.request.fullname!= ''){
+        customer.fullname= call.request.fullname;
      }
      if(call.request.username!= ''){
        customer.username = call.request.username;
 
-     }if(call.request.phone_number!= ''){
-        customer.phonenumber = call.request.phone_number;
+     }if(call.request.phonenumber!= ''){
+        customer.phonenumber = call.request.phonenumber;
      }
       customer.save()
       .then((savedUser) =>{ 
@@ -168,7 +169,7 @@ function changePassword(call,callback){
     
   }
     else{
-      customer.comparePassword(call.request.old_password,(err,isMatch)=>{
+      customer.comparePassword(call.request.oldpassword,(err,isMatch)=>{
       if(err){
         callback({
           code: 500 ,
@@ -176,7 +177,7 @@ function changePassword(call,callback){
         });
       }else{
         if(isMatch){
-          customer.password = call.request.new_password;
+          customer.password = call.request.newpassword;
           customer.save();
           callback(null,{
             message: 'Password Changed',
@@ -226,7 +227,7 @@ function resetPassword(call,callback){
       Customer.findOne({email:result})
       .exec()
       .then((customer)=>{
-        customer.password = call.request.new_password;
+        customer.password = call.request.newpassword;
         customer.status='active';
         customer.save();
         callback(null,{
@@ -278,9 +279,9 @@ function getMe(call,callback){
         callback(null,{
         code: 200,
         message: 'Customer found  ',
-        full_name:customer.fullname,
+        fullname:customer.fullname,
         email: customer.email,
-        phone_number: customer.phonenumber,
+        phonenumber: customer.phonenumber,
         username: customer.username,
         status: customer.status,
         });
