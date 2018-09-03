@@ -1,29 +1,28 @@
-var nodemailer = require('nodemailer');
+import emailServer from '../../config/email';
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  
-  auth: {
-    user: 'daniel.kamali.dk@gmail.com',
-    pass: 'Halamadrid'
-  }
-});
-
-
-function sendTokenMail(mail,token){
+function sendTokenEmail(call,callback){
   var mailOptions = {
     from: 'besparma@gmail.com',
-    to: mail,
+    to: call.request.email,
     subject: 'ForgetPassword',
-    text: token
+    text: `http://localhost:3000/api/users/api/customer/verify/` + call.request.token,
   };
   
-  transporter.sendMail(mailOptions, function(error, info){
+  emailServer.sendMail(mailOptions, function(error, info){
     if (error) {
       console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
+      callback(error.message,{
+        code:500,
+        message: 'Email Sending Fail'
+      });
+    } else {callback(null,{
+      code: 200 ,
+      message: info.response
+    });
+      }
   });
 
 }
+
+
+export default {sendTokenEmail}
