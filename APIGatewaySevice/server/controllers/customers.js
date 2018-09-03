@@ -9,7 +9,7 @@ function register(req, res, next) {
         password: req.body.password
     }
     client.register(message , (error, data) => {
-        if (error) res.sendStatus(500)
+        if (error) res.status(error.code).send(error.message)
         res.status(data.code).send({ message: data.message })
     })
 }
@@ -21,7 +21,7 @@ function login(req, res, next) {
         password: req.body.password
     }
     client.login(message,(error, data) =>{
-        if (error) res.sendStatus(500)
+        if (error) res.status(error.code).send(error.message)
         res.status(data.code).send({ message: data.message })
     })
 }
@@ -35,7 +35,7 @@ function forgetPassword(req, res, next) {
     }
 
     client.forgetPassword(message, (error, data) => {
-      if (error) res.sendStatus(500)
+      if (error) res.status(error.code).send(error.message)
       res.status(data.code).send({ message: data.message })
     })
 }
@@ -52,7 +52,7 @@ function update(req, res, next) {
     }
 
     client.update(message, (error, data) => {
-        if (error) res.sendStatus(500)
+        if (error) res.status(error.code).send(error.message)
         res.status(data.code).send({ message: data.message })
     })
 }
@@ -64,7 +64,7 @@ function remove(req, res, next) {
     }
 
     client.remove(message, (error, data) => {
-        if (error) res.sendStatus(500)
+        if (error) res.status(error.code).send(error.message)
         res.status(data.code).send({ message: data.message })
     })
 }
@@ -76,7 +76,7 @@ function verify(req, res, next){
     }
 
     client.verify(message, (error, data) => {
-        if (error) res.sendStatus(500)
+        if (error) res.status(error.code).send(error.message)
         res.status(data.code).send({ message: data.message })
     })
 }
@@ -90,7 +90,7 @@ function resetPassword(req, res, next) {
     }
 
     client.resetPassword(message, (error, data) => {
-      if (error) res.sendStatus(500)
+        if (error) res.status(error.code).send(error.message)
       res.status(data.code).send({ message: data.message })
     })
 }
@@ -104,7 +104,7 @@ function changePassword(req, res, next) {
     }
   
     client.changePassword(message, (error, data) => {
-      if (error) res.sendStatus(500)
+        if (error) res.status(error.code).send(error.message)
       res.status(data.code).send({ message: data.message })
     })
   }
@@ -115,7 +115,7 @@ function getMe(req, res, next) {
     const message = { id: req.user.id }
     
     client.getMe(message, (error, data) => {
-        if (error) res.sendStatus(500)
+        if (error) res.status(error.code).send(error.message)
         res.status(data.code).send({ message: data.message })
     })
 }
