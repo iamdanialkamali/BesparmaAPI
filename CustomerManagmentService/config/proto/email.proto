@@ -1,0 +1,22 @@
+syntax = "proto3"; //Specify proto3 version.
+
+package Email; //Optional: unique package name.
+
+//Service. define the methods that the grpc server can expose to the client.
+service emailManagementSevrice {
+  rpc sendTokenEmail  (EmailData)  returns (SimpleResponse);
+  
+}
+
+
+message SimpleResponse {
+  int32  code    = 1;
+  string message = 2;
+}
+
+message EmailData{
+  string token = 1;
+  string email = 2;
+}
+
+// Message Type definition for LeaveFeedback response.
