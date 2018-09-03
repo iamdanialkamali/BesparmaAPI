@@ -13,6 +13,8 @@
     "express": "4.16.3",
     "express-jwt": "5.3.1",
     "express-validation": "1.0.2",
+    "grpc": "^1.14.1",
+    "joi": "^13.6.0",
     "jsonwebtoken": "8.3.0",
     "log4js": "3.0.4",
     "mongoose": "5.2.7",
@@ -28,7 +30,7 @@
     "babel-polyfill": "6.26.0",
     "babel-preset-env": "1.7.0",
     "del": "3.0.0",
-    "gulp": "3.9.1",
+    "gulp": "^4.0.0",
     "gulp-babel": "7.0.1",
     "gulp-load-plugins": "1.5.0",
     "gulp-nodemon": "2.2.1"
