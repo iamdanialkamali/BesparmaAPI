@@ -2,15 +2,20 @@ import client from '../../config/grpc'
 
 function register(req, res, next) {
     const message = {
-        fullName : req.body.fullName,
+        full_name : req.body.full_name,
         email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
+        phone_number: req.body.phone_number,
         username: req.body.username,
         password: req.body.password
     }
+
     client.register(message , (error, data) => {
+
         if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ message: data.message })
+        res.status(data.code).send({ 
+            message: data.message,
+            token: data.token
+        })
     })
 }
 
@@ -20,9 +25,13 @@ function login(req, res, next) {
         username: req.body.username,
         password: req.body.password
     }
+
     client.login(message,(error, data) =>{
         if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ message: data.message })
+        res.status(data.code).send({ 
+            message: data.message,
+            token: data.token
+        })
     })
 }
 
@@ -45,9 +54,9 @@ function forgetPassword(req, res, next) {
 function update(req, res, next) {
     const message = {
         id: req.user.id,
-        fullName: req.body.fullName,
+        full_name: req.body.full_name,
         email: req.body.email,
-        phoneNumber: req.body.phonenumber,
+        phone_number: req.body.phone_number,
         username: req.body.username
     }
 
@@ -116,7 +125,14 @@ function getMe(req, res, next) {
     
     client.getMe(message, (error, data) => {
         if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ message: data.message })
+        res.status(data.code).send({ 
+            message: data.message,
+            full_name: data.full_name,
+            email: data.email,
+            phone_number: data.phone_number,
+            username: data.username,
+            status: data.status
+        })
     })
 }
   
