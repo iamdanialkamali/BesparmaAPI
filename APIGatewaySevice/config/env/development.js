@@ -6,5 +6,5 @@ export default {
     jwtDuration: '24 hours',
     REDIS_HOST: '127.0.0.1',
     REDIS_PORT: '6379',
-    gRPCServer: 'localhost:port'
+    gRPCServer: 'localhost:50050'
 };
