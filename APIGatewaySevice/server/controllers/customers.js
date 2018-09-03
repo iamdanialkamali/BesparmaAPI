@@ -79,10 +79,10 @@ function remove(req, res, next) {
 }
 
 
-function verify(req, res, next){
-    const message = {
-        token: req.body.token
-    }
+
+
+function verify(req, res, next, token){
+    const message = { token }
 
     client.verify(message, (error, data) => {
         if (error) res.status(error.code).send(error.message)
@@ -94,12 +94,12 @@ function verify(req, res, next){
 
 function resetPassword(req, res, next) {
     const message = {
-      token   : req.body.token,
+      id      : req.user.id,
       password: req.body.password  
     }
 
     client.resetPassword(message, (error, data) => {
-        if (error) res.status(error.code).send(error.message)
+      if (error) res.status(error.code).send(error.message)
       res.status(data.code).send({ message: data.message })
     })
 }
@@ -137,4 +137,5 @@ function getMe(req, res, next) {
 }
   
 
-export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe }
+
+export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, verify }
