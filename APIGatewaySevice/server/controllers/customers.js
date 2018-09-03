@@ -118,7 +118,7 @@ function getMe(req, res, next) {
         if (error) res.sendStatus(500)
         res.status(data.code).send({ message: data.message })
     })
-  }
+}
   
 
 export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe }
