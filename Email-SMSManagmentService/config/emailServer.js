@@ -1,6 +1,6 @@
 let  grpc  = require('grpc');
 let email = require('../server/controllers/mail')
-
+try{
 const protoPath = require('path').join(__dirname, '../..', '/server/proto/');
 
 const proto = grpc.load({root: protoPath, file: 'email.proto' });
@@ -17,5 +17,8 @@ server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
 
 server.start();
 console.log('','grpc server running on port:', '0.0.0.0:50051');
+}catch(err){
+  console.log("EmailServer DOWN!!!!!!!\n",err.message);
 
+}
 export default server;

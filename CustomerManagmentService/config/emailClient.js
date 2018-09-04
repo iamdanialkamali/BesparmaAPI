@@ -1,5 +1,6 @@
 const grpc = require('grpc');
 
+try{
 
 const protoPath = require('path').join(__dirname, '', 'proto');
 
@@ -9,7 +10,10 @@ console.log("/////////////////////////\n",protoPath);
 //Create a new client instance that binds to the IP and port of the grpc server.
 const client = new proto.Email.emailManagementService('localhost:50051', grpc.credentials.createInsecure());
 
-
+}
+catch(err){
+    console.log("Customer emailClient DOWN!!!!!!!\n",err.message);
+}
 
 
 //Create a new client instance that binds to the IP and port of the grpc server.
