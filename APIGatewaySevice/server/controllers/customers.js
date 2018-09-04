@@ -81,8 +81,8 @@ function remove(req, res, next) {
 
 
 
-function verify(req, res, next, token){
-    const message = { token }
+function verify(req, res, next){
+    const message = { token: req.params.token }
 
     client.verify(message, (error, data) => {
         if (error) res.status(error.code).send(error.message)

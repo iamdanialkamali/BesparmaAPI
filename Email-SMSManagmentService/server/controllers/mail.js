@@ -1,6 +1,7 @@
 import emailServer from '../../config/email';
 
 function sendTokenEmail(call,callback){
+  console.log(call);
   var mailOptions = {
     from: 'besparma@gmail.com',
     to: call.request.email,
@@ -9,6 +10,8 @@ function sendTokenEmail(call,callback){
   };
   
   emailServer.sendMail(mailOptions, function(error, info){
+
+    console.log('seeeeeeeeeeeeeeeeeeeeeeeent');
     if (error) {
       console.log(error);
       callback(error.message,{

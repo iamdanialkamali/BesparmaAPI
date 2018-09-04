@@ -3,13 +3,12 @@ import jwt from 'jsonwebtoken';
 import config from '../../config/env';
 import redisClient from '../../config/redis';
 import tokengen from '../../config/tokengen';
-import emailClient from '../../config/emailClient'
+import emailClient from '../../config/emailClient';
 
 
 
 
 function register(call,callback){
-  console.log(call)
   Customer.create({
     username: call.request.username,
     password: call.request.password,
@@ -28,7 +27,11 @@ function register(call,callback){
     });
     let token = tokengen.generate();
   redisClient.set(token,call.request.email);
-  emailClient.sendTokenEmail(call.request.email,token);
+
+  emailClient.sendTokenEmail({
+    email :call.request.email,
+    token:token
+  });
     
   });
 }
@@ -39,14 +42,14 @@ function login (call,callback){
     username:call.request.username
   }).exec().then((customer)=>{
     if(!customer){
-      callback({
+      callback('username not found',{
         code: 404 ,
         message:'username not found'
     });}
     else{
       customer.comparePassword(call.request.password,(err,isMatch)=>{
       if(err){
-        callback({
+        callback('internal error :password matching Problem',{
           code: 500,
           message:'internal error :password matching Problem'
         });
@@ -59,7 +62,7 @@ function login (call,callback){
           });
         }
         else{
-          callback({
+          callback('internal error : Incorrect Password',{
             code: 403,
             message:' internal error : Incorrect Password'
           });
@@ -114,11 +117,16 @@ function update(call,callback) {
         message: 'Customer Updated',
         });
     });
+    }).catch((err)=>{
+      callback('Update Error',{
+        code: 204,
+        message: 'Update Error',
+        });
     });
     
     
   }catch(err){
-    callback({
+    callback(err.message,{
       code:500,
       message:err.message
     });
@@ -162,7 +170,7 @@ function changePassword(call,callback){
   .exec()
   .then((customer)=>{
     if(!customer){
-      callback({
+      callback('Customer not found',{
         code: 404 ,
         message:'Customer not found',
     });
@@ -171,7 +179,7 @@ function changePassword(call,callback){
     else{
       customer.comparePassword(call.request.oldpassword,(err,isMatch)=>{
       if(err){
-        callback({
+        callback(' internal error :password matching Problem',{
           code: 500 ,
           message:' internal error :password matching Problem'
         });
@@ -185,7 +193,7 @@ function changePassword(call,callback){
           });
         }
         else{
-          callback({
+          callback(' internal error : Incorrect Password',{
             code: 403,
             message: ' internal error : Incorrect Password'
           });
@@ -195,11 +203,16 @@ function changePassword(call,callback){
       });
 
     }
+  }).catch((err)=>{
+    callback(err.message,{
+      code : 404,
+      message : err.message,
+    });
   });
 }
 catch(err)
 {
-  callback({
+  callback(err.message,{
     code: 500,
     message:err.message
   });
@@ -219,7 +232,7 @@ function forgetPassword(call,callback){
 function resetPassword(call,callback){
   redisClient.get(call.request.token,(error, result) => {
     if (error) {
-      callback({
+      callback( 'Not Found',{
         code: 404,
         message: 'Not Found'
       })
@@ -233,7 +246,12 @@ function resetPassword(call,callback){
         callback(null,{
           code : 200 ,
           message:'Password Reseted'
-        })
+        });
+      }).catch((err)=>{
+        callback(err.message,{
+          code : 404,
+          message : err.message,
+        });
       });
     }
 });
@@ -242,9 +260,10 @@ function resetPassword(call,callback){
 
 
 function verify(call,callback){
+  console.log('toooooken:',call.request.token);
   redisClient.get(call.request.token,(error, result) => {
     if (error) {
-      callback({
+      callback('Customer Not Found',{
         code: 404,
         message:'Customer Not Found'
       })
@@ -256,10 +275,16 @@ function verify(call,callback){
           customer.status='active';
           customer.save();
         }
-        callback({
+        callback(null,{
           code : 200,
-          message:'Password Reseted '
-        },null)
+          message:'Account Activated '
+        });
+      }).catch((err)=>{
+        callback('Not Found',{
+          code : 404,
+          message:'Not Found '
+        });
+
       });
     }
 });
@@ -278,7 +303,7 @@ function getMe(call,callback){
       .then(() =>{ 
         callback(null,{
         code: 200,
-        message: 'Customer found  ',
+        message: 'Customer found',
         fullname:customer.fullname,
         email: customer.email,
         phonenumber: customer.phonenumber,
@@ -287,17 +312,17 @@ function getMe(call,callback){
         });
       });
     }).catch((err)=>{
-      callback({
+      callback(err.message,{
         code : 404,
         message : err.message,
-      },null);
+      });
     });
   
 }catch(err){
-  callback({
+  callback(err.message,{
     code: 500 ,
     message: err.message
-  },null);}
+  });}
 }
 
 /*

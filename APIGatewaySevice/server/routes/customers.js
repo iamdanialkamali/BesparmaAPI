@@ -36,7 +36,7 @@ router.route('/resetPassword')
 
 
 router.route('/verify/:token')
-  .get(validate(validations.userPassValidation), customerCtrl.verify)
+  .get(customerCtrl.verify)
 
 router.route('/getMe')
   .get(auth, customerCtrl.getMe)

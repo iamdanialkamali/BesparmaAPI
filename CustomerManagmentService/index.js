@@ -3,8 +3,6 @@ import redis from './config/redis';
 import config from './config/env';
 import mongoose from './config/mongoose';
 import customerServer from './config/customerServer';
-import emailClient from './config/emailClient';
-
 
 
 

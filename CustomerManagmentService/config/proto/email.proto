@@ -3,8 +3,8 @@ syntax = "proto3"; //Specify proto3 version.
 package Email; //Optional: unique package name.
 
 //Service. define the methods that the grpc server can expose to the client.
-service emailManagementSevrice {
-  rpc sendTokenEmail  (EmailData)  returns (SimpleResponse);
+service emailManagementService {
+  rpc sendTokenEmail  (EmailData)        returns (SimpleResponse);
   
 }
 
