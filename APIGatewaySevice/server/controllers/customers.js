@@ -46,9 +46,7 @@ function login(req, res, next) {
 
 
 function forgetPassword(req, res, next) {
-    const message = {
-      email   : req.body.email
-    }
+    const message = { email   : req.body.email }
 
     client.forgetPassword(message, (error, data) => {
       if (error) res.status(error.code).send(error.message)
@@ -60,7 +58,7 @@ function forgetPassword(req, res, next) {
 
 function update(req, res, next) {
     const message = {
-        id: req.user.id,
+        token: req.body.token,
         full_name: req.body.full_name,
         email: req.body.email,
         phone_number: req.body.phone_number,
@@ -75,9 +73,7 @@ function update(req, res, next) {
 
 
 function remove(req, res, next) {
-    const message = {
-        id: req.user.id
-    }
+    const message = { token: req.body.token }
 
     client.remove(message, (error, data) => {
         if (error) res.status(error.code).send(error.message)
@@ -112,7 +108,7 @@ function resetPassword(req, res, next) {
 
 function changePassword(req, res, next) {
     const message = {
-      id          : req.user.id,
+      token       : req.body.token,
       old_password: req.body.old_password,
       new_password: req.body.new_password
     }
@@ -126,7 +122,7 @@ function changePassword(req, res, next) {
 
 
 function getMe(req, res, next) {
-    const message = { id: req.user.id }
+    const message = { token: req.body.token }
     
     client.getMe(message, (error, data) => {
         if (error) res.status(error.code).send(error.message)
