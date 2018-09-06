@@ -37,10 +37,10 @@ message ResetPasswordRequest{
 
 message RegisterRequest {
   string fullname    = 1;
-  string email        = 2;
+  string email       = 2;
   string phonenumber = 3;
-  string username     = 4;
-  string password     = 5;
+  string username    = 4;
+  string password    = 5;
 }
 
 message RegisterResponse {
@@ -80,13 +80,13 @@ message ChangePasswordRequest {
 }
 
 message getMeResponse {
-  int32  code         = 1;
-  string message      = 2;
+  int32  code        = 1;
+  string message     = 2;
   string fullname    = 3;
-  string email        = 4;
+  string email       = 4;
   string phonenumber = 5;
-  string username     = 6;
-  string status       = 7;
+  string username    = 6;
+  string status      = 7;
 }
 
 // Message Type definition for LeaveFeedback response.

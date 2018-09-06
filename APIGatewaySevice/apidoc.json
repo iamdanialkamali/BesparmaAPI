@@ -1,0 +1,8 @@
+{
+    "name": "API Gateway Documentation",
+    "version": "1.0.0",
+    "description": "Document for all Gateway endpoints :)",
+    "template": {
+        "forceLanguage": "en"
+    }
+}
