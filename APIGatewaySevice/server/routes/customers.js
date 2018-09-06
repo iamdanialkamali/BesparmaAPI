@@ -7,6 +7,7 @@ import auth from '../../config/jwt';
 
 const router = express.Router()
 
+router.route('/register')
 /**
  * @api {post} /api/customers/register
  * @apiGroup Customers
@@ -36,45 +37,207 @@ const router = express.Router()
  *     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
  *   }
  * 
- * @apiError (400) BadRequest data verification error
- * @apiError (5xx) InternalServerError server is down probably.
- * @apiErrorExample {json} 5xx Error:
- *   HTTP/1.1 500 Not Found
- *   {
- *     "message": "Internal server error"
- *   }
+ * @apiUse BadRequest
+ * @apiUse InternalServerError
  * 
  **/
-
-router.route('/register')
   .post(validate(validations.registerDataValidation), customerCtrl.register)
 
-
 router.route('/login')
-  /* Login customer */
+/**
+ * @api {post} /api/customers/login
+ * @apiGroup Customers
+ *
+ * @apiParam {String} username        user's unique username { 3 to 24 characters }
+ * @apiParam {String} password        user's password { 6 to 30 charachters }
+ * 
+ * @apiParamExample {json} Login-example: 
+ *   {
+ *     "username": "a_otadi",
+ *     "password": "12{M}34"
+ *   }
+ * 
+ * @apiSuccess (200) {object} response               Response Object
+ * @apiSuccess (200) {String} response.message       Server message
+ * @apiSuccess (200) {String} response.token         Access-token
+ * @apiSuccessExample {json} login-Response:
+ *   HTTP/1.1 200 Logged In
+ *   {
+ *     "message": "Logged in",
+ *     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+ *   }
+ * 
+ * @apiUse BadRequest
+ * @apiUse InternalServerError
+ * @apiError (4xx) UserORPassWrong      username or password is wrong or usern doe's nor exist
+ * 
+ **/
   .post(validate(validations.userPassValidation), customerCtrl.login)
 
 
 router.route('/update')
-  /* Update a customer */
+/**
+ * @api {put} /api/customers/update
+ * @apiGroup Customers
+ * 
+ * @apiUse AuthorizationHeader
+ *
+ * @apiParam {String} username        Optional, unique username { 3 to 24 characters }
+ * @apiParam {String} phonenumber     Optional, unique phonenumber { 11 charachters }
+ * @apiParam {String} fullname        Optional, full name for contact things { 6 to 24 characters }
+ * 
+ * @apiParamExample {json} update-example: 
+ *   {
+ *     "username": "a.otadi",
+ *     "phonenumber": "09120000000",
+ *     "fullname": "alireza otadi"
+ *   }
+ * 
+ * @apiSuccess (200) {object} response               Response Object
+ * @apiSuccess (200) {String} response.message       Server message
+ * @apiSuccessExample {json} update-Response:
+ *   HTTP/1.1 200 Success
+ *   {
+ *     "message": "updated"
+ *   }
+ * 
+ * @apiUse BadRequest
+ * @apiUse NotAuthorizedError
+ * @apiUse InternalServerError
+ * 
+ **/
   .put(auth ,validate(validations.updateUserData), customerCtrl.update)
 
 router.route('/remove')
-  /* Remove a customer */
+/**
+ * @api {delete} /api/customers/remove
+ * @apiGroup Customers
+ * 
+ * @apiUse AuthorizationHeader
+ * 
+ * @apiSuccess (204) {object} response               Response Object
+ * @apiSuccess (204) {String} response.message       Server message
+ * @apiSuccessExample {json} remove-Response:
+ *   HTTP/1.1 204 noContent
+ *   {
+ *     "message": "deleted"
+ *   }
+ * 
+ * @apiUse NotAuthorizedError
+ * @apiUse InternalServerError
+ * 
+ **/
   .delete(auth,customerCtrl.remove)
 
-router.route('/changePassword')
-  /* Change password */
+router.route('/changepassword')
+/**
+ * @api {post} /api/customers/changepassword
+ * @apiGroup Customers
+ * 
+ * @apiUse AuthorizationHeader
+ * 
+ * @apiParam {String} oldpassword     user's old password { 6 to 30 charachters }
+ * @apiParam {String} newpassword     new password { 6 to 30 charachters }
+ * 
+ * @apiParamExample {json} update-example: 
+ *   {
+ *     "oldpassword": "12{M}34",
+ *     "newpassword": "43{M}21"
+ *   }
+ * 
+ * @apiSuccess (200) {object} response               Response Object
+ * @apiSuccess (200) {String} response.message       Server message
+ * @apiSuccessExample {json} changepassword-Response:
+ *   HTTP/1.1 200 Success
+ *   {
+ *     "message": "Password changed"
+ *   }
+ * 
+ * @apiUse NotAuthorizedError
+ * @apiUse BadRequest
+ * @apiUse InternalServerError
+ * 
+ **/
   .post(validate(validations.changePassword), customerCtrl.changePassword)
 
 router.route('/forgetPassword')
+/**
+ * @api {post} /api/customers/forgetpassword
+ * @apiGroup Customers
+ * 
+ * @apiParam {String} email     user's valid email address
+ * 
+ * @apiParamExample {json} forgetpassword-example: 
+ *   {
+ *     "email": "ali@gmail.com"
+ *   }
+ * 
+ * @apiSuccess (200) {object} response               Response Object
+ * @apiSuccess (200) {String} response.message       Server message
+ * @apiSuccessExample {json} forgetpassword-Response:
+ *   HTTP/1.1 200 Success
+ *   {
+ *     "message": "ckeck your email address"
+ *   }
+ * 
+ * @apiUse BadRequest
+ * @apiUse InternalServerError
+ * 
+ **/
   .post(validate(validations.forgetPassEmail), customerCtrl.forgetPassword)
   
-router.route('/resetPassword')
+router.route('/resetpassword')
+/**
+ * @api {post} /api/customers/resetpassword
+ * @apiGroup Customers
+ * 
+ * @apiParam {String} token     token that has sent to user's email
+ * @apiParam {String} password  user's new password { 6 to 30 charachters }
+ * 
+ * @apiParamExample {json} forgetpassword-example: 
+ *   {
+ *     "token": "kjhguYhliIGIYGoiIUHIUhiUHIUHiuHIUHIuhIUHIgyOG"
+ *     "password": "{{{ma}}}"
+ *   }
+ * 
+ * @apiSuccess (200) {object} response               Response Object
+ * @apiSuccess (200) {String} response.message       Server message
+ * @apiSuccessExample {json} forgetpassword-Response:
+ *   HTTP/1.1 200 Success
+ *   {
+ *     "message": "password reset successfully"
+ *   }
+ * 
+ * @apiUse BadRequest
+ * @apiUse InternalServerError
+ * 
+ **/
   .post(validate(validations.resetPassword), customerCtrl.resetPassword)
 
 
 router.route('/verify/:token')
+/**
+ * @api {get} /api/customers/verify/:token
+ * @apiGroup Customers
+ * 
+ * @apiParam {String} token     token that has sent to user's email
+ * @apiParamExample {json} verify-example: 
+ *   {
+ *     "token": "kjhguYhliIGIYGoiIUHIUhiUHIUHiuHIUHIuhIUHIgyOG"
+ *   }
+ * 
+ * @apiSuccess (200) {object} response               Response Object
+ * @apiSuccess (200) {String} response.message       Server message
+ * @apiSuccessExample {json} forgetpassword-Response:
+ *   HTTP/1.1 200 Success
+ *   {
+ *     "message": "email verified :)"
+ *   }
+ * 
+ * @apiUse BadRequest
+ * @apiUse InternalServerError
+ * 
+ **/
   .get(customerCtrl.verify)
 
 router.route('/getMe')
@@ -82,11 +245,7 @@ router.route('/getMe')
    * @api {get} /api/customers/getme
    * @apiGroup Customers
    * 
-   * @apiHeader {String} Authorization User's unique access-token.
-   * @apiHeaderExample {json} Authorization header-Example:
-   *   {
-   *     "Authorization": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-   *   }
+   * @apiUse AuthorizationHeader
    *
    * @apiSuccess {object} response                         Response Object
    * @apisuccess {String} response.message                 Server message
@@ -109,19 +268,8 @@ router.route('/getMe')
    *     }
    *   }
    * 
-   * @apiError (4xx) UserNotFound The token of the User was not found.
-   * @apiError (5xx) InternalServerError server is down probably.
-   * @apiErrorExample {json} 4xx Error:
-   *   HTTP/1.1 404 Not Found
-   *   {
-   *     "message": "User not found"
-   *   }
-   * 
-   * @apiErrorExample {json} 5xx Error:
-   *   HTTP/1.1 500 Not Found
-   *   {
-   *     "message": "Internal server error"
-   *   }
+   * @apiUse NotAuthorizedError
+   * @apiUse InternalServerError
    * 
    **/
   .get(auth, customerCtrl.getMe)
