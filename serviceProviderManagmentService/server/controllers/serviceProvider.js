@@ -335,16 +335,13 @@ function getSuggestedSP(call,callback){
             "maxDistance": 1000
         }}
     ],
-    function(err,results) {
-  
-    }
   ).then((e)=>{
     callback(null,{
       code: 200,
-      message :"Request Sent"; 
-    })
+      message :"Request Sent",
+    });
     callback(e);
-  })
+  });
   
 }
 /*
