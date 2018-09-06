@@ -1,5 +1,12 @@
 import client from '../../config/grpc'
 
+function getToken(req, res, next) {
+    if (req.get('Authorization')){
+        req.body.token = req.get("Authorization").split(' ')[1]
+        next()
+    } else res.status(401).send({ "message": "No authorization token was found" })
+}
+
 function register(req, res, next) {
     const message = {
         full_name : req.body.full_name,
@@ -135,4 +142,4 @@ function getMe(req, res, next) {
 }
   
 
-export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, verify }
+export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, verify, getToken }
