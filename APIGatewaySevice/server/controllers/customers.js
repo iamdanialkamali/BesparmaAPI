@@ -55,7 +55,6 @@ function update(req, res, next) {
     const message = {
         id: req.user.id,
         fullname: req.body.fullname,
-        email: req.body.email,
         phonenumber: req.body.phonenumber,
         username: req.body.username
     }
@@ -94,7 +93,7 @@ function verify(req, res, next){
 
 function resetPassword(req, res, next) {
     const message = {
-      id      : req.user.id,
+      token   : req.token,
       password: req.body.password  
     }
 
