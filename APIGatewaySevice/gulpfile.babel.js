@@ -40,3 +40,80 @@ gulp.task('nodemon', ['babel','proto'], () =>
     console.clear();
    })
 );
+   }).on('restart', function() {
+    console.clear();
+   })
+);
+   }).on('restart', function() {
+    console.clear();
+   })
+);
+   }).on('restart', function() {
+    console.clear();
+   })
+);
+   }).on('restart', function() {
+    console.clear();
+   })
+);
+   }).on('restart', function() {
+    console.clear();
+   })
+);
+   }).on('restart', function() {
+    console.clear();
+   })
+);
+   }).on('restart', function() {
+    console.clear();
+   })
+);
+   }).on('restart', function() {
+    console.clear();
+   })
+);
+   }).on('restart', function() {
+    console.clear();
+   })
+);
+// Gulp clean will remove the dist directory where we keep all our transpiled javascript code
+gulp.task('clean', () => {
+  return del('dist/**');
+});
+
+
+// Gulp set-env will set the NODE_ENV var to “test” while the gulp pipeline is being executed
+gulp.task('set-env', () => {
+  plugins.env({
+    vars: {
+      NODE_ENV: 'test'
+    }
+  });
+});
+
+    console.clear();
+   })
+);
+// Gulp clean will remove the dist directory where we keep all our transpiled javascript code
+gulp.task('clean', () => {
+  return del('dist/**');
+});
+
+    console.clear();
+   })
+);
+// Gulp clean will remove the dist directory where we keep all our transpiled javascript code
+gulp.task('clean', () => {
+  return del('dist/**');
+});
+
+
+// Gulp set-env will set the NODE_ENV var to “test” while the gulp pipeline is being executed
+gulp.task('set-env', () => {
+  plugins.env({
+    vars: {
+      NODE_ENV: 'test'
+    }
+  });
+});
+
