@@ -106,11 +106,7 @@ router.route('/update')
  * @apiUse InternalServerError
  * 
  **/
-<<<<<<< HEAD
-  .put(auth ,validate(validations.updateUserData), customerCtrl.update)
-=======
   .put(customerCtrl.getToken ,validate(validations.updateUserData), customerCtrl.update)
->>>>>>> hotfix/0.3.1
 
 router.route('/remove')
 /**
@@ -131,11 +127,7 @@ router.route('/remove')
  * @apiUse InternalServerError
  * 
  **/
-<<<<<<< HEAD
-  .delete(auth,customerCtrl.remove)
-=======
   .delete(customerCtrl.getToken, customerCtrl.remove)
->>>>>>> hotfix/0.3.1
 
 router.route('/changepassword')
 /**
@@ -166,11 +158,7 @@ router.route('/changepassword')
  * @apiUse InternalServerError
  * 
  **/
-<<<<<<< HEAD
-  .post(validate(validations.changePassword), customerCtrl.changePassword)
-=======
   .post(customerCtrl.getToken, validate(validations.changePassword), customerCtrl.changePassword)
->>>>>>> hotfix/0.3.1
 
 router.route('/forgetPassword')
 /**
@@ -284,10 +272,6 @@ router.route('/getMe')
    * @apiUse InternalServerError
    * 
    **/
-<<<<<<< HEAD
-  .get(auth, customerCtrl.getMe)
-=======
   .get(customerCtrl.getToken, customerCtrl.getMe)
->>>>>>> hotfix/0.3.1
   
 export default router
