@@ -1,5 +1,12 @@
 import client from '../../config/grpc'
 
+function getToken(req, res, next) {
+    if (req.get('Authorization')){
+        req.body.token = req.get("Authorization").split(' ')[1]
+        next()
+    } else res.status(401).send({ "message": "No authorization token was found" })
+}
+
 function register(req, res, next) {
     const message = {
         fullname : req.body.fullname,
@@ -39,9 +46,7 @@ function login(req, res, next) {
 
 
 function forgetPassword(req, res, next) {
-    const message = {
-      email   : req.body.email
-    }
+    const message = { email   : req.body.email }
 
     client.forgetPassword(message, (error, data) => {
       if (error) res.status(error.code).send(error.message)
@@ -55,7 +60,6 @@ function update(req, res, next) {
     const message = {
         id: req.user.id,
         fullname: req.body.fullname,
-        email: req.body.email,
         phonenumber: req.body.phonenumber,
         username: req.body.username
     }
@@ -68,9 +72,7 @@ function update(req, res, next) {
 
 
 function remove(req, res, next) {
-    const message = {
-        id: req.user.id
-    }
+    const message = { token: req.body.token }
 
     client.remove(message, (error, data) => {
         if (error) res.status(error.code).send(error.message)
@@ -94,7 +96,7 @@ function verify(req, res, next){
 
 function resetPassword(req, res, next) {
     const message = {
-      id      : req.user.id,
+      token   : req.token,
       password: req.body.password  
     }
 
@@ -121,7 +123,7 @@ function changePassword(req, res, next) {
 
 
 function getMe(req, res, next) {
-    const message = { id: req.user.id }
+    const message = { token: req.body.token }
     
     client.getMe(message, (error, data) => {
         if (error) res.status(error.code).send(error.message)
@@ -137,5 +139,5 @@ function getMe(req, res, next) {
 }
   
 
+export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, verify, getToken }
 
-export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, verify }
