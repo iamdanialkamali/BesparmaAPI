@@ -1,0 +1,1 @@
+import client from '../../config/grpc'
