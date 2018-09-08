@@ -1,4 +1,4 @@
-import User from '../models/user';
+//import User from '../models/user';
 
 function load(req, res, next, id) {
   User.findById(id)

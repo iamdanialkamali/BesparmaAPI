@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from '../../config/env';
-import User from '../models/user';
+//import User from '../models/user';
 
 function authenticate(req, res, next) {
     User.findOne({
