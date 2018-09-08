@@ -55,9 +55,6 @@ gulp.task('nodemon', ['babel','proto'], () =>
    })
 );
 
-
-
-
 // triggers mocha tests
 gulp.task('test', ['set-env'], () => {
   let exitCode = 0;
@@ -85,3 +82,4 @@ gulp.task('test', ['set-env'], () => {
 gulp.task('mocha', ['clean'], () => {
   return runSequence('babel', 'test');
  });
+
