@@ -9,14 +9,20 @@ const router = express.Router()
 
 router.route('/register')
 /**
- * @api {post} /api/customers/register
- * @apiGroup Customers
+ * @api {post} /api/serviceProviders/register
+ * @apiGroup ServiceProviders
  *
  * @apiParam {String} username        unique username { 3 to 24 characters }
  * @apiParam {String} email           unique && valid email (email will be verified and use for resetPassword)
  * @apiParam {String} phonenumber     unique phonenumber { 11 charachters }
  * @apiParam {String} password        { 6 to 30 charachters }
  * @apiParam {String} fullname        full name for contact things { 6 to 24 characters }
+ * @apiParam {String} degree
+ * @apiParam {String} nationalCode
+ * @apiParam {Boolean} marriage
+ * @apiParam {String} address
+ * @apiParam {Number} age
+ * @apiParam {String} homePhonenumber          
  * 
  * @apiParamExample {json} register-example: 
  *   {
@@ -25,6 +31,12 @@ router.route('/register')
  *     "phonenumber": "09100000000",
  *     "password": "12{M}34",
  *     "fullname": "ali otadi"
+ *     "degree"  : "Bachelor"
+ *     "nationalCode" : "0371810906"
+ *     "marraige" : "true"
+ *     "addres" : "Tehran - Forsat"
+ *     "age" : "21"
+ *     "homePhonenumber" : "02166140940"
  *   }
  * 
  * @apiSuccess (201) {object} response               Response Object
@@ -45,8 +57,8 @@ router.route('/register')
 
 router.route('/login')
 /**
- * @api {post} /api/customers/login
- * @apiGroup Customers
+ * @api {post} /api/serviceProviders/login
+ * @apiGroup ServiceProviders
  *
  * @apiParam {String} username        user's unique username { 3 to 24 characters }
  * @apiParam {String} password        user's password { 6 to 30 charachters }
@@ -77,8 +89,8 @@ router.route('/login')
 
 router.route('/update')
 /**
- * @api {put} /api/customers/update
- * @apiGroup Customers
+ * @api {put} /api/serviceProviders/update
+ * @apiGroup ServiceProviders
  * 
  * @apiUse AuthorizationHeader
  *
@@ -88,9 +100,15 @@ router.route('/update')
  * 
  * @apiParamExample {json} update-example: 
  *   {
- *     "username": "a.otadi",
+ *     "username": "h.otadi",
  *     "phonenumber": "09120000000",
- *     "fullname": "alireza otadi"
+ *     "fullname": "hamed otadi"
+ *     "degree"  : "Bachelor"
+ *     "nationalCode" : "0020582552"
+ *     "marraige" : "false"
+ *     "addres" : "Tehran - Nosrat"
+ *     "age" : "22"
+ *     "homePhonenumber" : "02188140940"
  *   }
  * 
  * @apiSuccess (200) {object} response               Response Object
@@ -110,8 +128,8 @@ router.route('/update')
 
 router.route('/remove')
 /**
- * @api {delete} /api/customers/remove
- * @apiGroup Customers
+ * @api {delete} /api/serviceProviders/remove
+ * @apiGroup ServiceProviders
  * 
  * @apiUse AuthorizationHeader
  * 
@@ -131,8 +149,8 @@ router.route('/remove')
 
 router.route('/changepassword')
 /**
- * @api {post} /api/customers/changepassword
- * @apiGroup Customers
+ * @api {post} /api/serviceProviders/changepassword
+ * @apiGroup ServiceProviders
  * 
  * @apiUse AuthorizationHeader
  * 
@@ -162,8 +180,8 @@ router.route('/changepassword')
 
 router.route('/forgetPassword')
 /**
- * @api {post} /api/customers/forgetpassword
- * @apiGroup Customers
+ * @api {post} /api/serviceProviders/forgetpassword
+ * @apiGroup ServiceProviders
  * 
  * @apiParam {String} email     user's valid email address
  * 
@@ -188,8 +206,8 @@ router.route('/forgetPassword')
   
 router.route('/resetPassword')
 /**
- * @api {post} /api/customers/resetpassword
- * @apiGroup Customers
+ * @api {post} /api/serviceProviders/resetpassword
+ * @apiGroup ServiceProviders
  * 
  * @apiParam {String} token     token that has sent to user's email
  * @apiParam {String} password  user's new password { 6 to 30 charachters }
@@ -217,8 +235,8 @@ router.route('/resetPassword')
 
 router.route('/verify/:token')
 /**
- * @api {get} /api/customers/verify/:token
- * @apiGroup Customers
+ * @api {get} /api/serviceProviders/verify/:token
+ * @apiGroup ServiceProviders
  * 
  * @apiParam {String} token     token that has sent to user's email
  * @apiParamExample {json} verify-example: 
@@ -242,8 +260,8 @@ router.route('/verify/:token')
 
 router.route('/getMe')
   /**
-   * @api {get} /api/customers/getme
-   * @apiGroup Customers
+   * @api {get} /api/serviceProviders/getme
+   * @apiGroup ServiceProviders
    * 
    * @apiUse AuthorizationHeader
    *
@@ -254,16 +272,27 @@ router.route('/getMe')
    * @apiSuccess {String} response.profile.email           User's Email
    * @apiSuccess {String} response.profile.phonenumber     User's Phone number
    * @apiSuccess {String} response.profile.fullname        User's Fullname
+   * @apiSuccess {String} response.profile.degree          User's Degree
+   * @apiSuccess {String} response.profile.nationalCode    User's National Code
+   * @apiSuccess {Boolean} response.profile.marriage       User's Marriage status
+   * @apiSuccess {String} response.profile.address         User's Address
+   * @apiSuccess {Number} response.profile.age             User's Age
+   * @apiSuccess {String} response.profile.homePhonenumber User's Home phone number   * 
    * @apiSuccess {String} response.profile.status          User's status
    * @apiSuccessExample {json} GetMe-Response:
    *   HTTP/1.1 200 Success
    *   {
    *     message : "Ok"
    *     profile: {
-   *       "username": "a_otadi",
-   *       "email": "ali@gmail.com",
-   *       "phonenumber": "09100000000",
-   *       "fullname": "ali otadi",
+   *       "username": "h.otadi",
+*          "phonenumber": "09120000000",
+    *      "fullname": "hamed otadi"
+    *      "degree"  : "Bachelor"
+    *      "nationalCode" : "0020582552"
+    *      "marraige" : "false"
+    *      "addres" : "Tehran - Nosrat"
+    *      "age" : "22"
+    *      "homePhonenumber" : "02188140940"
    *       "status": "active"
    *     }
    *   }
@@ -274,7 +303,4 @@ router.route('/getMe')
    **/
   .get(serviceProviderCtrl.getToken, serviceProviderCtrl.getMe)
 
-router.route('/getSuggestedServiceProviders')
-  .get(serviceProviderCtrl.getSuggestedSPs)
-  
 export default router

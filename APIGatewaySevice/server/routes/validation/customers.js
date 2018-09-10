@@ -38,5 +38,10 @@ export default {
     body: {
       password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required()
     }
+  },
+  getSuggestedSPs: {
+    body: {
+      location: Joi.array().items(Joi.number().min(-90).max(90), Joi.number().min(-180).max(180))
+    }
   }
 }

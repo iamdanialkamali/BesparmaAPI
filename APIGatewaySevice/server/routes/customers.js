@@ -135,9 +135,9 @@ router.route('/changepassword')
  * @apiGroup Customers
  * 
  * @apiUse AuthorizationHeader
- * 
  * @apiParam {String} oldpassword     user's old password { 6 to 30 charachters }
- * @apiParam {String} newpassword     new password { 6 to 30 charachters }
+ * @apiParam {String} newpassword    
+ *  new password { 6 to 30 charachters }
  * 
  * @apiParamExample {json} update-example: 
  *   {
@@ -273,5 +273,13 @@ router.route('/getMe')
    * 
    **/
   .get(customerCtrl.getToken, customerCtrl.getMe)
+
+
+router.route('/getSuggestedServiceProviders')
+/**
+ * 
+ * 
+ **/
+  .get(validate(validations.getSuggestedSPs), serviceProviderCtrl.getSuggestedSPs)
   
 export default router

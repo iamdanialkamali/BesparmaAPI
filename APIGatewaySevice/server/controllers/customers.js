@@ -137,7 +137,16 @@ function getMe(req, res, next) {
         })
     })
 }
-  
+ 
+function gteSuggestedSPs(req, res, next) {
+    const message = { location : req.body.location }
 
-export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, verify, getToken }
+    client.gteSuggestedSPs(message, (error,data) => {
+        if (error) res.status(error.code).send(error.message)
+        res.status(data.code).send({ message: data.message })
+    })
+}
+
+
+export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, verify, getToken, gteSuggestedSPs }
 
