@@ -95,14 +95,14 @@ function remove(req, res, next) {
 
 
 
-function verify(req, res, next){
-    const message = { token: req.params.token }
+// function verify(req, res, next){
+//     const message = { token: req.params.token }
 
-    client.verify(message, (error, data) => {
-        if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ message: data.message })
-    })
-}
+//     client.verify(message, (error, data) => {
+//         if (error) res.status(error.code).send(error.message)
+//         res.status(data.code).send({ message: data.message })
+//     })
+// }
 
 
 
