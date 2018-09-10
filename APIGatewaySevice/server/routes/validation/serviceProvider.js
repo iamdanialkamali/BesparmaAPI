@@ -1,1 +1,59 @@
 import Joi from 'joi'
+
+export default {
+  registerDataValidation: {
+    body: {
+      email       : Joi.string().email({ minDomainAtoms: 2 }).required(),
+      phonenumber: Joi.string().regex(/^[0-9]{11}$/).required(),
+      username    : Joi.string().regex(/^[0-9a-zA-Z]{3,24}$/).required(),
+      password    : Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required(),
+      fullname   : Joi.string().regex(/^[0-9a-zA-Z\s]{6,24}$/).required(),
+      degree      : Joi.string().regex(/^[0-9a-zA-Z\s]{6,24}$/).required(),
+      nationalCode: Joi.string().regex(/^[0-9]{10}$/).required(),
+      marriage    : Joi.boolean().required(),
+      address     : Joi.string().regex(/^[0-9a-zA-Z\s]{8,50}$/).required(),
+      age         : Joi.number().min(18).error(() => 'You must be older than 18 years old'),
+      homePhonenumber: Joi.string().regex(/^[0-9]{10,13}$/).required()
+    }
+  },
+  userPassValidation: {
+    body: {
+        username: Joi.string().regex(/^[0-9a-zA-Z]{3,24}$/).required(),
+        password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required(),
+    }
+  },
+  forgetPassEmail: {
+    body: {
+      email: Joi.string().email({ minDomainAtoms: 2 }).required()
+    }
+  },
+  updateUserData: {
+    body: {
+      phonenumber: Joi.string().regex(/^[0-9]{11}$/),
+      username   : Joi.string().regex(/^[0-9a-zA-Z]{3,24}$/),
+      fullname   : Joi.string().regex(/^[0-9a-zA-Z\s]{6,24}$/),
+      degree      : Joi.string().regex(/^[0-9a-zA-Z\s]{6,24}$/).required(),
+      nationalCode: Joi.string().regex(/^[0-9]{10}$/).required(),
+      marriage    : Joi.boolean().required(),
+      address     : Joi.string().regex(/^[0-9a-zA-Z\s]{8,50}$/).required(),
+      age         : Joi.number().min(18).error(() => 'You must be older than 18 years old'),
+      homePhonenumber: Joi.string().regex(/^[0-9]{11}$/).required()
+    }
+  },
+  changePassword: {
+    body: {
+      oldPassword: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required(),
+      newPassword: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required()
+    }
+  },
+  resetPassword: {
+    body: {
+      password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required()
+    }
+  },
+  getSuggestedSPs: {
+    body: {
+      location: Joi.array().items(Joi.number().min(-90).max(90), Joi.number().min(-180).max(180))
+    }
+  }
+}
