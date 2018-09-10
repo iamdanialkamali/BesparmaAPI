@@ -17,12 +17,12 @@ router.route('/register')
  * @apiParam {String} phonenumber     unique phonenumber { 11 charachters }
  * @apiParam {String} password        { 6 to 30 charachters }
  * @apiParam {String} fullname        full name for contact things { 6 to 24 characters }
- * @apiParam {String} degree
- * @apiParam {String} nationalCode
- * @apiParam {Boolean} marriage
- * @apiParam {String} address
- * @apiParam {Number} age
- * @apiParam {String} homePhonenumber          
+ * @apiParam {String} degree          degree of service provider
+ * @apiParam {String} nationalCode    unique && valid national code { 10 characters }
+ * @apiParam {Boolean} marriage       marriage status 
+ * @apiParam {String} address         valid address { 8 to 50 characters}
+ * @apiParam {Number} age             age of SP {greater than 18}
+ * @apiParam {String} homePhonenumber home phone number {10 to 13 characters}
  * 
  * @apiParamExample {json} register-example: 
  *   {
