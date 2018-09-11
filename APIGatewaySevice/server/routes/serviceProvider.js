@@ -284,15 +284,15 @@ router.route('/getMe')
    *   {
    *     message : "Ok"
    *     profile: {
-   *       "username": "h.otadi",
-*          "phonenumber": "09120000000",
-    *      "fullname": "hamed otadi"
-    *      "degree"  : "Bachelor"
-    *      "nationalCode" : "0020582552"
-    *      "marraige" : "false"
-    *      "addres" : "Tehran - Nosrat"
-    *      "age" : "22"
-    *      "homePhonenumber" : "02188140940"
+   *      "username": "h.otadi",
+   *      "phonenumber": "09120000000",
+   *      "fullname": "hamed otadi"
+   *      "degree"  : "Bachelor"
+   *      "nationalCode" : "0020582552"
+   *      "marraige" : "false"
+   *      "addres" : "Tehran - Nosrat"
+   *      "age" : "22"
+   *      "homePhonenumber" : "02188140940"
    *       "status": "active"
    *     }
    *   }

@@ -277,9 +277,18 @@ router.route('/getMe')
 
 router.route('/getSuggestedServiceProviders')
 /**
- * 
- * 
- **/
+   * @api {get} /api/customers/getSuggestedServiceProviders
+   * @apiGroup Customers
+   * 
+   * @apiUse AuthorizationHeader
+   *
+   * //success and faild request should go here
+   * //.proto file isn't update
+   * 
+   * @apiUse NotAuthorizedError
+   * @apiUse InternalServerError
+   * 
+   **/
   .get(validate(validations.getSuggestedSPs), serviceProviderCtrl.getSuggestedSPs)
   
 export default router
