@@ -157,5 +157,5 @@ function getMe(req, res, next) {
 }
   
 
-export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, verify, getToken }
+export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, getToken }
 

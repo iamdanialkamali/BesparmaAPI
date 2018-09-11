@@ -1,10 +1,13 @@
 import express  from 'express'
 import validate from 'express-validation'
 
-import customerCtrl from '../controllers/customers'
 import validations  from './validation/customers'
+
+import customerCtrl from '../controllers/customers'
+import serviceProviderCtrl from '../controllers/serviceProvider'
 import auth from '../../config/jwt';
 
+console.log(serviceProviderCtrl)
 const router = express.Router()
 
 router.route('/register')
@@ -276,19 +279,7 @@ router.route('/getMe')
 
 
 router.route('/getSuggestedServiceProviders')
-/**
-   * @api {get} /api/customers/getSuggestedServiceProviders
-   * @apiGroup Customers
-   * 
-   * @apiUse AuthorizationHeader
-   *
-   * //success and faild request should go here
-   * //.proto file isn't update
-   * 
-   * @apiUse NotAuthorizedError
-   * @apiUse InternalServerError
-   * 
-   **/
-  .get(validate(validations.getSuggestedSPs), serviceProviderCtrl.getSuggestedSPs)
+
+  .get(validate(validations.getSuggestedSPs), customerCtrl.getSuggestedSPs)
   
 export default router

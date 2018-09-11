@@ -40,42 +40,6 @@ gulp.task('nodemon', ['babel','proto'], () =>
     console.clear();
    })
 );
-   }).on('restart', function() {
-    console.clear();
-   })
-);
-   }).on('restart', function() {
-    console.clear();
-   })
-);
-   }).on('restart', function() {
-    console.clear();
-   })
-);
-   }).on('restart', function() {
-    console.clear();
-   })
-);
-   }).on('restart', function() {
-    console.clear();
-   })
-);
-   }).on('restart', function() {
-    console.clear();
-   })
-);
-   }).on('restart', function() {
-    console.clear();
-   })
-);
-   }).on('restart', function() {
-    console.clear();
-   })
-);
-   }).on('restart', function() {
-    console.clear();
-   })
-);
 // Gulp clean will remove the dist directory where we keep all our transpiled javascript code
 gulp.task('clean', () => {
   return del('dist/**');
@@ -90,18 +54,10 @@ gulp.task('set-env', () => {
     }
   });
 });
-
-    console.clear();
-   })
-);
 // Gulp clean will remove the dist directory where we keep all our transpiled javascript code
 gulp.task('clean', () => {
   return del('dist/**');
 });
-
-    console.clear();
-   })
-);
 // Gulp clean will remove the dist directory where we keep all our transpiled javascript code
 gulp.task('clean', () => {
   return del('dist/**');
