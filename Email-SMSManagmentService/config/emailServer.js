@@ -5,7 +5,7 @@ const protoPath = require('path').join(__dirname, '../..', '/server/proto/');
 
 const proto = grpc.load({root: protoPath, file: 'email.proto' });
 
-const server = new grpc.Server();
+var server = new grpc.Server();
 
 server.addProtoService(
   proto.Email.emailManagementService.service, 
