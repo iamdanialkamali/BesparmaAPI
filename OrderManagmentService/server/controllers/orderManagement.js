@@ -1,60 +1,55 @@
-import ServiceProvider from '../models/serviceProvider';
+import Order from '../models/order';
 import jwt from 'jsonwebtoken';
 import config from '../../config/env';
 import redisClient from '../../config/redis';
 import tokengen from '../../config/tokengen';
 import emailClient from '../../config/emailClient';
+import moment from 'moment';
+import "google/protobuf/struct.proto";
 
 
 
 
-function register(call,callback){
-  ServiceProvider.create({
-    username:   call.request.username,
-    password:   call.request.password,
-    fullname: call.request.fullname,
-    phonenumber: call.request.phonenumber,
-    email: call.request.email,
+function addOrder(call,callback){
+  Order.create({
+    services: call.request.servicesI, 
+    cost: call.request.cost,
+    datetime: moment(call.request.datetime) ,
+    provider: call.request.providerId,
+    customer: call.request.customerId,
     status: 'pending',
-    degree: call.request.degree,
-    nationalcode: call.request.nationalCode,
-    marrige: call.request.marrige,
-    age: call.request.age,
-    homephonenumber: call.request.homephonenumber
-
-
+    rate: null ,
+    location: call.request.location,
   })
-  .then((savedServiceProvider) => {
-    let ServiceProviderToken = generateToken(savedServiceProvider);
+  .then((order) => {
     callback(null,{
        code: 200,
-       message: 'Account Created',
-       userstatus: savedServiceProvider.status,
-       token : ServiceProviderToken,
+       message: 'Order Created',
     });
-    let token = tokengen.generate();
-  redisClient.set(token,call.request.email);
-
-  emailClient.sendTokenEmail({
-    email :call.request.email,
-    token:token
-  });
     
+  
+  }).catch((err)=>{
+    callback(null,{
+      code: 503,
+      message: 'Wrong Input',
+      userstatus: savedorder.status,
+      token : orderToken,
+   });
   });
 }
 
 
 function login (call,callback){
-  ServiceProvider.findOne({
+  Order.findOne({
     username:call.request.username
-  }).exec().then((serviceProvider)=>{
-    if(!serviceProvider){
+  }).exec().then((order)=>{
+    if(!order){
       callback('username not found',{
         code: 404 ,
         message:'username not found'
     });}
     else{
-      serviceProvider.comparePassword(call.request.password,(err,isMatch)=>{
+      order.comparePassword(call.request.password,(err,isMatch)=>{
       if(err){
         callback('internal error :password matching Problem',{
           code: 500,
@@ -63,7 +58,7 @@ function login (call,callback){
       }else{
         if(isMatch){
           callback(null,{
-            token: generateToken(serviceProvider),
+            token: generateToken(order),
             code: 200,
             message: 'Login Successfull'
           });
@@ -84,10 +79,10 @@ function login (call,callback){
 }
   
 
-function generateToken(serviceProvider) {
+function generateToken(order) {
   
   const jwtPayload = {
-    id: serviceProvider._id
+    id: order._id
   };
   const jwtData = {
     expiresIn: config.jwtDuration,
@@ -105,21 +100,21 @@ function update(call,callback) {
   try{
     decoded = jwt.verify(token,config.jwtSecret);
     console.log(decoded);
-    ServiceProvider.findById(decoded.id).exec().then((serviceProvider)=>{
+    Order.findById(decoded.id).exec().then((order)=>{
      if(call.request.fullname!= ''){
-        serviceProvider.fullname= call.request.fullname;
+        order.fullname= call.request.fullname;
      }
      if(call.request.username!= ''){
-       serviceProvider.username = call.request.username;
+       order.username = call.request.username;
 
      }if(call.request.phonenumber!= ''){
-        serviceProvider.phonenumber = call.request.phonenumber;
+        order.phonenumber = call.request.phonenumber;
      }
-      serviceProvider.save()
+      order.save()
       .then((savedUser) =>{ 
         callback(null,{
         code: 204,
-        message: 'ServiceProvider Updated',
+        message: 'Order Updated',
         });
     });
     }).catch((err)=>{
@@ -144,14 +139,14 @@ function remove(call,callback) {
   try{
     let decoded = jwt.verify(token,config.jwtSecret)
   
-    const serviceProvider = ServiceProvider.findById(decoded.id).exec().then((serviceProvider)=>{
-    serviceProvider.status = 'deleted'
+    const order = Order.findById(decoded.id).exec().then((order)=>{
+    order.status = 'deleted'
 
-    serviceProvider.save()
+    order.save()
       .then(() =>{ 
         callback(null,{
         code: 204,
-        message: 'serviceProvider Remove Successfully : '+ serviceProvider.username,
+        message: 'order Remove Successfully : '+ order.username,
         });
       });
     });
@@ -171,18 +166,18 @@ function changePassword(call,callback){
 
     let decoded = jwt.verify(token,config.jwtSecret);
   
-  ServiceProvider.findById(decoded.id)
+  Order.findById(decoded.id)
   .exec()
-  .then((serviceProvider)=>{
-    if(!serviceProvider){
-      callback('ServiceProvider not found',{
+  .then((order)=>{
+    if(!order){
+      callback('Order not found',{
         code: 404 ,
-        message:'ServiceProvider not found',
+        message:'Order not found',
     });
     
   }
     else{
-      serviceProvider.comparePassword(call.request.oldpassword,(err,isMatch)=>{
+      order.comparePassword(call.request.oldpassword,(err,isMatch)=>{
       if(err){
         callback(' internal error :password matching Problem',{
           code: 500 ,
@@ -190,8 +185,8 @@ function changePassword(call,callback){
         });
       }else{
         if(isMatch){
-          serviceProvider.password = call.request.newpassword;
-          serviceProvider.save();
+          order.password = call.request.newpassword;
+          order.save();
           callback(null,{
             message: 'Password Changed',
             code : 200,
@@ -242,12 +237,12 @@ function resetPassword(call,callback){
         message: 'Not Found'
       })
     }else{
-      ServiceProvider.findOne({email:result})
+      Order.findOne({email:result})
       .exec()
-      .then((serviceProvider)=>{
-        serviceProvider.password = call.request.newpassword;
-        serviceProvider.status='active';
-        serviceProvider.save();
+      .then((order)=>{
+        order.password = call.request.newpassword;
+        order.status='active';
+        order.save();
         callback(null,{
           code : 200 ,
           message:'Password Reseted'
@@ -265,12 +260,12 @@ function resetPassword(call,callback){
 
 
 function verify(call,callback){
-      ServiceProvider.findOne({id:call.request.id})
+      Order.findOne({id:call.request.id})
       .exec()
-      .then((serviceProvider)=>{
-        if(serviceProvider.status=='pending'){
-          serviceProvider.status='active';
-          serviceProvider.save();
+      .then((order)=>{
+        if(order.status=='pending'){
+          order.status='active';
+          order.save();
         }
         callback(null,{
           code : 200,
@@ -293,18 +288,18 @@ function getMe(call,callback){
   try{
     let decoded = jwt.verify(token,config.jwtSecret)
   
-   ServiceProvider.findById(decoded.id).exec().then((serviceProvider)=>{
+   Order.findById(decoded.id).exec().then((order)=>{
 
-    serviceProvider.save()
+    order.save()
       .then(() =>{ 
         callback(null,{
         code: 200,
-        message: 'ServiceProvider found',
-        fullname:serviceProvider.fullname,
-        email: serviceProvider.email,
-        phonenumber: serviceProvider.phonenumber,
-        username: serviceProvider.username,
-        status: serviceProvider.status,
+        message: 'Order found',
+        fullname:order.fullname,
+        email: order.email,
+        phonenumber: order.phonenumber,
+        username: order.username,
+        status: order.status,
         });
       });
     }).catch((err)=>{
@@ -323,7 +318,7 @@ function getMe(call,callback){
 
 function getSuggestedSP(call,callback){
   let location = call.request.location;
-  ServiceProvider.aggregate(
+  Order.aggregate(
     [
         { "$geoNear": {
             "location": {
@@ -347,7 +342,7 @@ function getSuggestedSP(call,callback){
 /*
 function list(call,callback) {
   const { limit = 50, skip = 0 } = req.c;
-  serviceProvider.find()
+  order.find()
     .skip(skip)
     .limit(limit)
     .exec()

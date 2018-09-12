@@ -1,0 +1,57 @@
+syntax = "proto3"; //Specify proto3 version.
+
+package Service; //Optional: unique package name.
+
+//Service. define the methods that the grpc server can expose to the client.
+service serviceManagementService {
+  rpc add          (AddRequest)    returns (AddResponse);
+  rpc update       (UpdateRequest) returns (SimpleResponse);
+  rpc remove       (SimpleRequest) returns (SimpleResponse);
+  rpc get          (SimpleRequest) returns (GetResponse);
+  
+}
+message SimpleRequest{
+  string name = 1;
+}
+
+
+
+message UpdateRequest {
+  string name         = 1;
+  string description  = 2;
+  string cost         = 3;
+  string oldName      = 4;
+  string status       = 5;
+}
+
+
+message AddRequest {
+  string  name         = 1;
+  string  description = 2;
+  string  cost        = 3;
+}
+
+message AddResponse {
+  int32  code        = 1;
+  string message     = 2;
+  string name       = 3;
+  string status = 4;
+  
+}
+
+message SimpleResponse {
+  int32  code    = 1;
+  string message = 2;
+}
+
+
+message GetResponse {
+  int32   code         = 1;
+  string  message      = 2;
+  string  name         = 3;
+  string  description  = 4;
+  int32   cost         = 5;
+  string  status       = 6;
+}
+
+// Message Type definition for LeaveFeedback response.
