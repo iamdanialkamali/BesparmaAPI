@@ -65,7 +65,6 @@ function forgetPassword(req, res, next) {
 function update(req, res, next) {
     const message = {
         fullname : req.body.fullname,
-        email: req.body.email,
         phonenumber: req.body.phonenumber,
         username: req.body.username,
         degree: req.body.degree,

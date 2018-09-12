@@ -15,15 +15,19 @@ function register(req, res, next) {
         username: req.body.username,
         password: req.body.password
     }
-    console.log(message)
-    client.register(message , (error, data) => {
-
-        if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ 
+    try {
+      client.register(message , (error, data) => {
+        if (error) res.status(data.code).send(data.message)
+          res.status(data.code).send({ 
             message: data.message,
             token: data.token
-        })
-    })
+          })
+      })
+    }
+    catch(exeption) {
+      res.status(500).send({message: "Internal server error"})
+    }
+    
 }
 
 
@@ -32,14 +36,20 @@ function login(req, res, next) {
         username: req.body.username,
         password: req.body.password
     }
-
-    client.login(message,(error, data) =>{
-        if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ 
-            message: data.message,
-            token: data.token
-        })
-    })
+    try {
+        client.login(message,(error, data) =>{
+            console.log(`error: ${error} \ndata: ${JSON.stringify(data)}`)
+            if (error) res.status(data.code).send(data.message)
+            res.status(data.code).send({ 
+                message: data.message
+                //token: data.token
+            })
+        })    
+    }
+    catch(exeption){
+        res.status(500).send({message: "Internal server error"})
+    }
+    
 }
 
 
@@ -48,36 +58,51 @@ function login(req, res, next) {
 function forgetPassword(req, res, next) {
     const message = { email   : req.body.email }
 
-    client.forgetPassword(message, (error, data) => {
-      if (error) res.status(error.code).send(error.message)
-      res.status(data.code).send({ message: data.message })
-    })
+    try{
+        client.forgetPassword(message, (error, data) => {
+            if (error) res.status(data.code).send(data.message)
+            res.status(data.code).send({ message: data.message })
+        })
+    }
+    catch(exeption){
+        res.status(500).send({message: "Internal server error"})
+    }
 }
 
 
 
 function update(req, res, next) {
     const message = {
-        id: req.user.id,
+        token: req.user.token,
         fullname: req.body.fullname,
         phonenumber: req.body.phonenumber,
         username: req.body.username
     }
-
-    client.update(message, (error, data) => {
-        if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ message: data.message })
-    })
+    
+    try {
+        client.update(message, (error, data) => {
+            if (error) res.status(data.code).send(data.message)
+            res.status(data.code).send({ message: data.message })
+        })
+    }
+    catch(exeption){
+        res.status(500).send({message: "Internal server error"})
+    }
 }
 
 
 function remove(req, res, next) {
     const message = { token: req.body.token }
 
-    client.remove(message, (error, data) => {
-        if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ message: data.message })
-    })
+    try {
+        client.remove(message, (error, data) => {
+            if (error) res.status(data.code).send(data.message)
+            res.status(data.code).send({ message: data.message })
+        })
+    }
+    catch(exeption){
+        res.status(500).send({message: "Internal server error"})
+    }
 }
 
 
@@ -86,10 +111,15 @@ function remove(req, res, next) {
 function verify(req, res, next){
     const message = { token: req.params.token }
 
-    client.verify(message, (error, data) => {
-        if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ message: data.message })
-    })
+    try {
+        client.verify(message, (error, data) => {
+            if (error) res.status(data.code).send(data.message)
+            res.status(data.code).send({ message: data.message })
+        })
+    }
+    catch(exeption){
+        res.status(500).send({message: "Internal server error"})
+    }
 }
 
 
@@ -99,25 +129,35 @@ function resetPassword(req, res, next) {
       token   : req.token,
       password: req.body.password  
     }
-
-    client.resetPassword(message, (error, data) => {
-      if (error) res.status(error.code).send(error.message)
-      res.status(data.code).send({ message: data.message })
-    })
+    
+    try {
+        client.resetPassword(message, (error, data) => {
+            if (error) res.status(data.code).send(data.message)
+            res.status(data.code).send({ message: data.message })
+        })
+    }
+    catch(exeption){
+        res.status(500).send({message: "Internal server error"})
+    }
 }
 
 
 function changePassword(req, res, next) {
     const message = {
-      id          : req.user.id,
+      token      : req.user.id,
       oldpassword: req.body.oldpassword,
       newpassword: req.body.newpassword
     }
   
-    client.changePassword(message, (error, data) => {
-        if (error) res.status(error.code).send(error.message)
-      res.status(data.code).send({ message: data.message })
-    })
+    try {
+        client.changePassword(message, (error, data) => {
+            if (error) res.status(data.code).send(data.message)
+          res.status(data.code).send({ message: data.message })
+        })
+    }
+    catch(exeption){
+        res.status(500).send({message: "Internal server error"})
+    }
   }
 
 
@@ -125,26 +165,38 @@ function changePassword(req, res, next) {
 function getMe(req, res, next) {
     const message = { token: req.body.token }
     
-    client.getMe(message, (error, data) => {
-        if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ 
-            message: data.message,
-            fullname: data.fullname,
-            email: data.email,
-            phonenumber: data.phonenumber,
-            username: data.username,
-            status: data.status
+    try {
+        client.getMe(message, (error, data) => {
+            if (error) res.status(data.code).send(data.message)
+            res.status(data.code).send({ 
+                message: data.message,
+                fullname: data.fullname,
+                email: data.email,
+                phonenumber: data.phonenumber,
+                username: data.username,
+                status: data.status
+            })
         })
-    })
+    }
+    catch(exeption){
+        res.status(500).send({message: "Internal server error"})
+    }
+    
 }
  
 function getSuggestedSPs(req, res, next) {
     const message = { location : req.body.location }
 
-    client.getSuggestedSPs(message, (error,data) => {
-        if (error) res.status(error.code).send(error.message)
-        res.status(data.code).send({ message: data.message })
-    })
+    try{
+        client.getSuggestedSPs(message, (error,data) => {
+            if (error) res.status(data.code).send(data.message)
+            res.status(data.code).send({ message: data.message })
+        })
+    }
+    catch(exeption){
+        res.status(500).send({message: "Internal server error"})
+    }
+    
 }
 
 
