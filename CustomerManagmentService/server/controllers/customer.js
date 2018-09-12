@@ -42,10 +42,11 @@ function login (call,callback){
     username:call.request.username
   }).exec().then((customer)=>{
     if(!customer){
-      callback('username not found',{
+      callback(null,
+      {
         code: 404 ,
-        message:'username not found'
-    });}
+        message:'username not found' })
+      }
     else{
       customer.comparePassword(call.request.password,(err,isMatch)=>{
       if(err){
@@ -93,7 +94,7 @@ function generateToken(customer) {
   return token;
 }
 
-
+``  
 function update(call,callback) {
   let token = call.request.token;
   let decoded = null;
@@ -212,6 +213,19 @@ function changePassword(call,callback){
 }
 catch(err)
 {
+  sdsaldksadaflekf
+  falsekf
+
+  nنبد
+  ب
+  بن
+  بیبت
+  fj
+  fjDfjda
+  بتن
+  fjبت
+  یبتش
+  dflzzzzzz
   callback(err.message,{
     code: 500,
     message:err.message

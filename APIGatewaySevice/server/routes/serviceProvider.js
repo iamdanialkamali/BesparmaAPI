@@ -1,25 +1,28 @@
 import express  from 'express'
 import validate from 'express-validation'
 
-import validations  from './validation/customers'
-
-import customerCtrl from '../controllers/customers'
-import serviceProviderCtrl from '../controllers/serviceProvider'
+import serviceProvideCtrl from '../controllers/serviceProviders'
+import validations  from './validation/serviceProviders'
 import auth from '../../config/jwt';
 
-console.log(serviceProviderCtrl)
 const router = express.Router()
 
 router.route('/register')
 /**
- * @api {post} /api/customers/register
- * @apiGroup Customers
+ * @api {post} /api/serviceProviders/register
+ * @apiGroup ServiceProviders
  *
  * @apiParam {String} username        unique username { 3 to 24 characters }
  * @apiParam {String} email           unique && valid email (email will be verified and use for resetPassword)
  * @apiParam {String} phonenumber     unique phonenumber { 11 charachters }
  * @apiParam {String} password        { 6 to 30 charachters }
  * @apiParam {String} fullname        full name for contact things { 6 to 24 characters }
+ * @apiParam {String} degree          degree of service provider
+ * @apiParam {String} nationalCode    unique && valid national code { 10 characters }
+ * @apiParam {Boolean} marriage       marriage status 
+ * @apiParam {String} address         valid address { 8 to 50 characters}
+ * @apiParam {Number} age             age of SP {greater than 18}
+ * @apiParam {String} homePhonenumber home phone number {10 to 13 characters}
  * 
  * @apiParamExample {json} register-example: 
  *   {
@@ -28,6 +31,12 @@ router.route('/register')
  *     "phonenumber": "09100000000",
  *     "password": "12{M}34",
  *     "fullname": "ali otadi"
+ *     "degree"  : "Bachelor"
+ *     "nationalCode" : "0371810906"
+ *     "marraige" : "true"
+ *     "addres" : "Tehran - Forsat"
+ *     "age" : "21"
+ *     "homePhonenumber" : "02166140940"
  *   }
  * 
  * @apiSuccess (201) {object} response               Response Object
@@ -44,12 +53,12 @@ router.route('/register')
  * @apiUse InternalServerError
  * 
  **/
-  .post(validate(validations.registerDataValidation), customerCtrl.register)
+  .post(validate(validations.registerDataValidation), serviceProviderCtrl.register)
 
 router.route('/login')
 /**
- * @api {post} /api/customers/login
- * @apiGroup Customers
+ * @api {post} /api/serviceProviders/login
+ * @apiGroup ServiceProviders
  *
  * @apiParam {String} username        user's unique username { 3 to 24 characters }
  * @apiParam {String} password        user's password { 6 to 30 charachters }
@@ -75,13 +84,13 @@ router.route('/login')
  * @apiError (4xx) UserORPassWrong      username or password is wrong or usern doe's nor exist
  * 
  **/
-  .post(validate(validations.userPassValidation), customerCtrl.login)
+  .post(validate(validations.userPassValidation), serviceProviderCtrl.login)
 
 
 router.route('/update')
 /**
- * @api {put} /api/customers/update
- * @apiGroup Customers
+ * @api {put} /api/serviceProviders/update
+ * @apiGroup ServiceProviders
  * 
  * @apiUse AuthorizationHeader
  *
@@ -91,9 +100,15 @@ router.route('/update')
  * 
  * @apiParamExample {json} update-example: 
  *   {
- *     "username": "a.otadi",
+ *     "username": "h.otadi",
  *     "phonenumber": "09120000000",
- *     "fullname": "alireza otadi"
+ *     "fullname": "hamed otadi"
+ *     "degree"  : "Bachelor"
+ *     "nationalCode" : "0020582552"
+ *     "marraige" : "false"
+ *     "addres" : "Tehran - Nosrat"
+ *     "age" : "22"
+ *     "homePhonenumber" : "02188140940"
  *   }
  * 
  * @apiSuccess (200) {object} response               Response Object
@@ -109,12 +124,12 @@ router.route('/update')
  * @apiUse InternalServerError
  * 
  **/
-  .put(customerCtrl.getToken ,validate(validations.updateUserData), customerCtrl.update)
+  .put(serviceProviderCtrl.getToken ,validate(validations.updateUserData), serviceProviderCtrl.update)
 
 router.route('/remove')
 /**
- * @api {delete} /api/customers/remove
- * @apiGroup Customers
+ * @api {delete} /api/serviceProviders/remove
+ * @apiGroup ServiceProviders
  * 
  * @apiUse AuthorizationHeader
  * 
@@ -130,17 +145,17 @@ router.route('/remove')
  * @apiUse InternalServerError
  * 
  **/
-  .delete(customerCtrl.getToken, customerCtrl.remove)
+  .delete(serviceProviderCtrl.getToken, serviceProviderCtrl.remove)
 
 router.route('/changepassword')
 /**
- * @api {post} /api/customers/changepassword
- * @apiGroup Customers
+ * @api {post} /api/serviceProviders/changepassword
+ * @apiGroup ServiceProviders
  * 
  * @apiUse AuthorizationHeader
+ * 
  * @apiParam {String} oldpassword     user's old password { 6 to 30 charachters }
- * @apiParam {String} newpassword    
- *  new password { 6 to 30 charachters }
+ * @apiParam {String} newpassword     new password { 6 to 30 charachters }
  * 
  * @apiParamExample {json} update-example: 
  *   {
@@ -161,12 +176,12 @@ router.route('/changepassword')
  * @apiUse InternalServerError
  * 
  **/
-  .post(customerCtrl.getToken, validate(validations.changePassword), customerCtrl.changePassword)
+  .post(serviceProviderCtrl.getToken, validate(validations.changePassword), serviceProviderCtrl.changePassword)
 
 router.route('/forgetPassword')
 /**
- * @api {post} /api/customers/forgetpassword
- * @apiGroup Customers
+ * @api {post} /api/serviceProviders/forgetpassword
+ * @apiGroup ServiceProviders
  * 
  * @apiParam {String} email     user's valid email address
  * 
@@ -187,12 +202,12 @@ router.route('/forgetPassword')
  * @apiUse InternalServerError
  * 
  **/
-  .post(validate(validations.forgetPassEmail), customerCtrl.forgetPassword)
+  .post(validate(validations.forgetPassEmail), serviceProviderCtrl.forgetPassword)
   
-router.route('/resetpassword')
+router.route('/resetPassword')
 /**
- * @api {post} /api/customers/resetpassword
- * @apiGroup Customers
+ * @api {post} /api/serviceProviders/resetpassword
+ * @apiGroup ServiceProviders
  * 
  * @apiParam {String} token     token that has sent to user's email
  * @apiParam {String} password  user's new password { 6 to 30 charachters }
@@ -215,13 +230,13 @@ router.route('/resetpassword')
  * @apiUse InternalServerError
  * 
  **/
-  .post(validate(validations.resetPassword), customerCtrl.resetPassword)
+  .post(validate(validations.resetPassword), serviceProviderCtrl.resetPassword)
 
 
 router.route('/verify/:token')
 /**
- * @api {get} /api/customers/verify/:token
- * @apiGroup Customers
+ * @api {get} /api/serviceProviders/verify/:token
+ * @apiGroup ServiceProviders
  * 
  * @apiParam {String} token     token that has sent to user's email
  * @apiParamExample {json} verify-example: 
@@ -241,12 +256,12 @@ router.route('/verify/:token')
  * @apiUse InternalServerError
  * 
  **/
-  .get(customerCtrl.verify)
+  .get(serviceProviderCtrl.verify)
 
 router.route('/getMe')
   /**
-   * @api {get} /api/customers/getme
-   * @apiGroup Customers
+   * @api {get} /api/serviceProviders/getme
+   * @apiGroup ServiceProviders
    * 
    * @apiUse AuthorizationHeader
    *
@@ -257,16 +272,27 @@ router.route('/getMe')
    * @apiSuccess {String} response.profile.email           User's Email
    * @apiSuccess {String} response.profile.phonenumber     User's Phone number
    * @apiSuccess {String} response.profile.fullname        User's Fullname
+   * @apiSuccess {String} response.profile.degree          User's Degree
+   * @apiSuccess {String} response.profile.nationalCode    User's National Code
+   * @apiSuccess {Boolean} response.profile.marriage       User's Marriage status
+   * @apiSuccess {String} response.profile.address         User's Address
+   * @apiSuccess {Number} response.profile.age             User's Age
+   * @apiSuccess {String} response.profile.homePhonenumber User's Home phone number   * 
    * @apiSuccess {String} response.profile.status          User's status
    * @apiSuccessExample {json} GetMe-Response:
    *   HTTP/1.1 200 Success
    *   {
    *     message : "Ok"
    *     profile: {
-   *       "username": "a_otadi",
-   *       "email": "ali@gmail.com",
-   *       "phonenumber": "09100000000",
-   *       "fullname": "ali otadi",
+   *      "username": "h.otadi",
+   *      "phonenumber": "09120000000",
+   *      "fullname": "hamed otadi"
+   *      "degree"  : "Bachelor"
+   *      "nationalCode" : "0020582552"
+   *      "marraige" : "false"
+   *      "addres" : "Tehran - Nosrat"
+   *      "age" : "22"
+   *      "homePhonenumber" : "02188140940"
    *       "status": "active"
    *     }
    *   }
@@ -275,11 +301,6 @@ router.route('/getMe')
    * @apiUse InternalServerError
    * 
    **/
-  .get(customerCtrl.getToken, customerCtrl.getMe)
+  .get(serviceProviderCtrl.getToken, serviceProviderCtrl.getMe)
 
-
-router.route('/getSuggestedServiceProviders')
-
-  .get(validate(validations.getSuggestedSPs), customerCtrl.getSuggestedSPs)
-  
 export default router
