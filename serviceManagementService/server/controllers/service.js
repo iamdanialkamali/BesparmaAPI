@@ -10,6 +10,7 @@ function add(call,callback){
   }).exec()
   .then((savedService) => {
     callback(null,{
+       error:false,
        code: 200,
        message: 'Account Created',
        name: savedService.name,
@@ -17,7 +18,8 @@ function add(call,callback){
     });
     
   }).catch((err)=>{
-    callback('Wrong Input On Inserting In Database',{
+    callback(null,{
+      error:true,
       code: 500,
       message: 'Wrong Input On Inserting In Database',
    });
@@ -41,12 +43,14 @@ function update(call,callback) {
       service.save()
       .then((savedUser) =>{ 
         callback(null,{
+        error:false,
         code: 204,
         message: 'Service Updated',
         });
     });
     }).catch((err)=>{
-      callback('Update Error',{
+      callback(null,{
+        error:true,
         code: 204,
         message: 'Update Error',
         });
@@ -54,7 +58,8 @@ function update(call,callback) {
     
     
   }catch(err){
-    callback("Internal Error",{
+    callback(null,{
+      error:true,
       code:500,
       message:"Internal Error"
     });
@@ -74,19 +79,22 @@ function remove(call,callback) {
     service.save()
       .then(() =>{ 
         callback(null,{
+          error:false,
         code: 204,
         message: 'Service Remove Successfully : '+ service.description,
         });
       });
     }).catch((err)=>{
-      callback("Updating Database Error",{
+      callback(null,{
+        error:true,
         code: 500,
         message: "Updating Database Error"
       });
     });
   
 }catch(err){  
-  callback("Internal Error",{
+  callback(null,{
+    error:true,
     code: 500,
     message: "Internal Error"
   });}
@@ -112,14 +120,16 @@ function get(call,callback){
         });
       });
     }).catch((err)=>{
-      callback("Internal Error",{
+      callback(null,{
+        error:true,
         code : 404,
         message : "Internal Error",
       });
     });
   
 }catch(err){
-  callback("Internal Error",{
+  callback(null,{
+    error:true,
     code: 500 ,
     message: "Internal Error"
   });}

@@ -10,9 +10,8 @@ service customerManagementService {
   rpc update         (UpdateRequest)          returns (SimpleResponse);
   rpc remove         (SimpleTokenBaseRequest) returns (SimpleResponse);
   rpc verify         (SimpleTokenBaseRequest) returns (SimpleResponse);
-  rpc resetPassword  (ResetPasswordRequest) returns (SimpleResponse);
+  rpc resetPassword  (ResetPasswordRequest)   returns (SimpleResponse);
   rpc changePassword (ChangePasswordRequest)  returns (SimpleResponse);
-  
   rpc getMe          (SimpleTokenBaseRequest) returns (getMeResponse);
   
  // rpc orderService (User) returns (LegalAge);  TODO:   after making  serviceManagemnetService
@@ -24,10 +23,12 @@ service customerManagementService {
 message SimpleResponse {
   int32  code    = 1;
   string message = 2;
+  bool   error   = 3;
 }
 
 message SimpleTokenBaseRequest{
   string token = 1;
+
 }
 
 message ResetPasswordRequest{
@@ -36,9 +37,9 @@ message ResetPasswordRequest{
 }
 
 message RegisterRequest {
-  string full_name    = 1;
+  string fullname    = 1;
   string email        = 2;
-  string phone_number = 3;
+  string phonenumber = 3;
   string username     = 4;
   string password     = 5;
 }
@@ -47,7 +48,8 @@ message RegisterResponse {
   int32  code        = 1;
   string message     = 2;
   string token       = 3;
-  string user_status = 4;
+  string userstatus  = 4;
+  bool   error       = 5;
   
 }
 
@@ -60,6 +62,7 @@ message LoginResponse {
   int32  code    = 1;
   string message = 2;
   string token   = 3;
+  bool   error   = 4;
 }
 
 message ForgetPasswordRequest{
@@ -67,26 +70,27 @@ message ForgetPasswordRequest{
 }
 
 message UpdateRequest {
-  string full_name    = 1;
-  string phone_number = 2;
+  string fullname    = 1;
+  string phonenumber = 2;
   string username     = 3;
   string token        = 4;
 }
 
 message ChangePasswordRequest {
-  string old_password = 1;
-  string new_password = 2;
+  string oldpassword = 1;
+  string newpassword = 2;
   string token       = 3;
 }
 
 message getMeResponse {
   int32  code         = 1;
   string message      = 2;
-  string full_name    = 3;
+  string fullname     = 3;
   string email        = 4;
-  string phone_number = 5;
+  string phonenumber  = 5;
   string username     = 6;
   string status       = 7;
+  bool   error        = 8;
 }
 
 // Message Type definition for LeaveFeedback response.

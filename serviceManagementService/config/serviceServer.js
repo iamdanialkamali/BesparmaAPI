@@ -1,18 +1,15 @@
 let service = require('../server/controllers/service');
 
 let  grpc  = require('grpc');
-let test = require('grpc/proto-loader')
 
-const protoPath = require('path').join(__dirname, '../..', '/server/proto/');
+var protoPath = require('path').join(__dirname, '../..', '/config/proto/');
 console.log('////////////////////////////\n',protoPath);
-const proto = grpc.load({root: protoPath, file: 'service.proto' });
+const proto = grpc. grpc.loadPackageDefinition({root: protoPath, file: 'service.proto' });
 
 const server = new grpc.Server();
 
-server.addService(
-  proto.Service.serviceManagementService.service,service);
+server.addService(proto.Service.serviceManagementService.service,service);
 
-//Specify the IP and and port to start the grpc Server, no SSL in test environment
 server.bind('0.0.0.0:50054', grpc.ServerCredentials.createInsecure());
 
 

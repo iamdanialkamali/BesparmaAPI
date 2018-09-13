@@ -25,6 +25,7 @@ message LocationBaseRequset{
 message SimpleResponse {
   int32  code    = 1;
   string message = 2;
+  bool   error   = 3;
 }
 
 message VerifyRequest{
@@ -54,6 +55,8 @@ message addOrderResponse {
   int32  code        = 1;
   string message     = 2;
   string token       = 3;
+  bool   error   = 4;
+
   
   
 }
@@ -67,18 +70,21 @@ message UpdateRequest {
   float  rate               = 6 ;
   repeated float location   = 7  [packed=true] ;
   string token              = 10 ;
+
 }
 
 
 message addOrderResponse {  
   repeated string service_id = 1 ;
-  int32  cost               = 2 ;
+  int32   cost               = 2 ;
   string datetime           = 3 ;
   int32  provider        = 4 ;
   float  rate               = 6 ;
   repeated float location   = 7  [packed=true] ;
-  string message = 8;
+  string   message = 8;
   int32 code = 9;
+  bool error   = 10;
+
 }
 
 // Message Type definition for LeaveFeedback response.

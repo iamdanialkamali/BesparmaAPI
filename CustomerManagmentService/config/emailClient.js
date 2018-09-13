@@ -1,13 +1,10 @@
 const grpc = require('grpc');
 
-var client  ;
 try{
 
-const protoPath = require('path').join(__dirname, '', 'proto');
+const protoPath = require('path').join(__dirname, '../..', '/config/proto/');
 
-
-const proto = grpc.load({root: protoPath, file: 'email.proto' });
-console.log("/////////////////////////\n",protoPath);
+const proto =  grpc.loadPackageDefinition({root: protoPath, file: 'email.proto' });
 //Create a new client instance that binds to the IP and port of the grpc server.
 var client = new proto.Email.emailManagementService('localhost:50051', grpc.credentials.createInsecure());
 
