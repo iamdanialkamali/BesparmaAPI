@@ -15,7 +15,6 @@ function register(call,callback){
     fullname: call.request.fullname,
     phonenumber: call.request.phonenumber,
     email: call.request.email,
-    status:'pending'
   })
   .then((savedCustomer) => {
     let customerToken = generateToken(savedCustomer);
@@ -35,7 +34,13 @@ function register(call,callback){
     token:token
   });
     
+  }).catch((error)=>{
+    callback(null,{
+      error:true,
+      code: 400 ,
+      message:'incorrect Input'
   });
+});
 }
 
 
