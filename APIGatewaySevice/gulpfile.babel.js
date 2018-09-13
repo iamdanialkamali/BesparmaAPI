@@ -6,9 +6,10 @@ import del from 'del';
 // Load the gulp plugins into the `plugins` variable
 const plugins = loadPlugins();
 
+var restart_called = false;
 const paths = {
   js: ['./**/*.js', '!dist/**', '!node_modules/**'],
-  proto:['./**/*.proto']
+  proto:['./**/*.proto', '!dist/**', '!node_modules/**']
 };
 
 gulp.task('clean', () => {
@@ -37,6 +38,7 @@ gulp.task('nodemon', ['babel','proto'], () =>
 ).on('start', function() {
     console.clear();
    }).on('restart', function() {
+    restart_called = true;
     console.clear();
    })
 );
@@ -65,6 +67,16 @@ gulp.task('clean', () => {
 });
 
 
+gulp.on('exit', function () {
+
+  if (!restart_called) {
+    console.log("KILLING NODEMON PROCESS ID:" + process.pid);
+    process.kill(process.pid);
+    return;
+  }
+
+  restart_called = false;
+});
 // Gulp set-env will set the NODE_ENV var to “test” while the gulp pipeline is being executed
 gulp.task('set-env', () => {
   plugins.env({

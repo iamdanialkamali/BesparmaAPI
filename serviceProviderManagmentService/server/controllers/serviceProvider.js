@@ -9,6 +9,7 @@ import emailClient from '../../config/emailClient';
 
 
 function register(call,callback){
+  console.log("test");
   ServiceProvider.create({
     username:   call.request.username,
     password:   call.request.password,
@@ -16,17 +17,18 @@ function register(call,callback){
     phonenumber: call.request.phonenumber,
     email: call.request.email,
     status: 'pending',
+    address: call.request.address,
     degree: call.request.degree,
     nationalcode: call.request.nationalCode,
     marrige: call.request.marrige,
     age: call.request.age,
-    homephonenumber: call.request.homephonenumber
-
-
+    homephonenumber: call.request.homePhonenumber
   })
   .then((savedServiceProvider) => {
     let ServiceProviderToken = generateToken(savedServiceProvider);
-    callback(null,{ error:false,
+   
+    callback(null,
+      {error:false,
        code: 200,
        message: 'Account Created',
        userstatus: savedServiceProvider.status,
@@ -41,10 +43,11 @@ function register(call,callback){
   });
     
   }).catch((error)=>{
+    console.log(error.message)
     callback(null,{
       error:true,
-      code: 404 ,
-      message:'username not found'
+      code: 400 ,
+      message:'Wrong Input'
   });
   });
 }
@@ -61,6 +64,20 @@ function login (call,callback){
         message:'username not found'
     });
   }else{
+    if(serviceProvider.status =='pending'){
+      callback(null,{
+        error:true,
+        code: 404 ,
+        message:'user is not activated '
+    });
+    }
+    if(serviceProvider.status =='deleted'){
+      callback(null,{
+        error:true,
+        code: 404 ,
+        message:'user is deleted '
+    });
+    }
       serviceProvider.comparePassword(call.request.password,(err,isMatch)=>{
       if(err){
         callback(null,{

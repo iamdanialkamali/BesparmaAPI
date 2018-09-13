@@ -19,7 +19,7 @@ service orderManagementService {
 message LocationBaseRequset{
 
   repeated int32 location = 1 [packed=true];
-
+  
 }
 
 message SimpleResponse {

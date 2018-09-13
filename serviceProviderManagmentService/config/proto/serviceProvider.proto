@@ -13,15 +13,22 @@ service serviceProviderManagementService {
   rpc resetPassword  (ResetPasswordRequest)   returns (SimpleResponse);
   rpc changePassword (ChangePasswordRequest)  returns (SimpleResponse);
   rpc getMe          (SimpleTokenBaseRequest) returns (getMeResponse);
+  ///rpc getSuggestedSPs(LocationBaseRequset)    returns (SimpleResponse);
   
  // rpc setApplicant (User) returns (LegalAge);  TODO:   after making  serviceManagemnetService
   
 }
 
+message LocationBaseRequset{
+
+  repeated int32 location = 1 [packed=true];
+
+}
 
 message SimpleResponse {
   int32  code    = 1;
   string message = 2;
+  bool error     = 3;
 }
 
 message VerifyRequest{
@@ -56,6 +63,7 @@ message RegisterResponse {
   string message     = 2;
   string token       = 3;
   string status      = 4;
+  bool error     = 5;
   
 }
 
@@ -68,6 +76,8 @@ message LoginResponse {
   int32  code    = 1;
   string message = 2;
   string token   = 3;
+  bool error     = 4;
+
 }
 
 message ForgetPasswordRequest{
@@ -108,6 +118,8 @@ message getMeResponse {
   string status          = 12;
   int32  code            = 13;
   string message         = 14;
+  bool error     = 15;
+
 }
 
 // Message Type definition for LeaveFeedback response.

@@ -3,7 +3,7 @@ let customer = require('../server/controllers/serviceProvider');
 let  grpc  = require('grpc');
 
 
-const protoPath = require('path').join(__dirname, '../..', '/server/proto/');
+const protoPath = require('path').join(__dirname, '../..', '/config/proto/');
 
 const proto = grpc.load({root: protoPath, file: 'serviceProvider.proto' });
 

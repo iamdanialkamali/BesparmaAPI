@@ -28,6 +28,7 @@ message LocationBaseRequset{
 message SimpleResponse {
   int32  code    = 1;
   string message = 2;
+  bool error     = 3;
 }
 
 message VerifyRequest{
@@ -51,7 +52,7 @@ message RegisterRequest {
   string password        = 5 ;
   string degree          = 6 ;
   string nationalCode    = 7 ;
-  bool   marriage         = 8 ;
+  bool   marrige         = 8 ;
   string address         = 9 ;
   int32  age             = 10; 
   string homePhonenumber = 11;
@@ -62,6 +63,7 @@ message RegisterResponse {
   string message     = 2;
   string token       = 3;
   string status      = 4;
+  bool error     = 5;
   
 }
 
@@ -74,6 +76,8 @@ message LoginResponse {
   int32  code    = 1;
   string message = 2;
   string token   = 3;
+  bool error     = 4;
+
 }
 
 message ForgetPasswordRequest{
@@ -86,7 +90,7 @@ message UpdateRequest {
   string username        = 3 ;
   string degree          = 4 ;
   string nationalCode    = 5 ;
-  bool   marriage         = 6 ;
+  bool   marrige         = 6 ;
   string address         = 7 ;
   int32  age             = 8 ; 
   string homePhonenumber = 9 ;
@@ -107,13 +111,15 @@ message getMeResponse {
   string password        = 5 ;
   string degree          = 6 ;
   string nationalCode    = 7 ;
-  bool   marriage         = 8 ;
+  bool   marrige         = 8 ;
   string address         = 9 ;
   int32  age             = 10; 
   string homePhonenumber = 11;
   string status          = 12;
   int32  code            = 13;
   string message         = 14;
+  bool error     = 15;
+
 }
 
 // Message Type definition for LeaveFeedback response.

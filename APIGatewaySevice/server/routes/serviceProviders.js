@@ -301,6 +301,6 @@ router.route('/getMe')
    * @apiUse InternalServerError
    * 
    **/
-  .get(serviceProviderCtrl.getToken, serviceProviderCtrl.getMe)
+  .post(serviceProviderCtrl.getToken, serviceProviderCtrl.getMe)
 
 export default router
