@@ -26,7 +26,7 @@ function register(call,callback){
   })
   .then((savedServiceProvider) => {
     let ServiceProviderToken = generateToken(savedServiceProvider);
-    callback(null,{
+    callback(null,{ error:false,
        code: 200,
        message: 'Account Created',
        userstatus: savedServiceProvider.status,
@@ -40,6 +40,12 @@ function register(call,callback){
     token:token
   });
     
+  }).catch((error)=>{
+    callback(null,{
+      error:true,
+      code: 404 ,
+      message:'username not found'
+  });
   });
 }
 
@@ -49,27 +55,31 @@ function login (call,callback){
     username:call.request.username
   }).exec().then((serviceProvider)=>{
     if(!serviceProvider){
-      callback('username not found',{
+      callback(null,{
+        error:true,
         code: 404 ,
         message:'username not found'
-    });}
-    else{
+    });
+  }else{
       serviceProvider.comparePassword(call.request.password,(err,isMatch)=>{
       if(err){
-        callback('internal error :password matching Problem',{
+        callback(null,{
+          error:true,
           code: 500,
           message:'internal error :password matching Problem'
         });
       }else{
         if(isMatch){
-          callback(null,{
+          callback(null,{ 
+            error:false,
             token: generateToken(serviceProvider),
             code: 200,
             message: 'Login Successfull'
           });
         }
         else{
-          callback('internal error : Incorrect Password',{
+          callback(null,{
+            error:true,
             code: 403,
             message:' internal error : Incorrect Password'
           });
@@ -117,13 +127,15 @@ function update(call,callback) {
      }
       serviceProvider.save()
       .then((savedUser) =>{ 
-        callback(null,{
+        callback(null,{ 
+          error:false,
         code: 204,
         message: 'ServiceProvider Updated',
         });
     });
     }).catch((err)=>{
-      callback('Update Error',{
+      callback(null,{
+        error:true,
         code: 204,
         message: 'Update Error',
         });
@@ -131,9 +143,10 @@ function update(call,callback) {
     
     
   }catch(err){
-    callback(err.message,{
+    callback(null,{
+      error:true,
       code:500,
-      message:err.message
+      message:"Internal Error"
     });
 }
 }
@@ -149,7 +162,8 @@ function remove(call,callback) {
 
     serviceProvider.save()
       .then(() =>{ 
-        callback(null,{
+        callback(null,{ 
+        error:false,
         code: 204,
         message: 'serviceProvider Remove Successfully : '+ serviceProvider.username,
         });
@@ -157,9 +171,10 @@ function remove(call,callback) {
     });
   
 }catch(err){  
-  callback(err.message,{
+  callback(null,{
+    error:true,
     code: 500,
-    message: err.message
+    message: "Internal Error"
   });}
 }
 
@@ -175,7 +190,8 @@ function changePassword(call,callback){
   .exec()
   .then((serviceProvider)=>{
     if(!serviceProvider){
-      callback('ServiceProvider not found',{
+      callback(null,{
+        error:true,
         code: 404 ,
         message:'ServiceProvider not found',
     });
@@ -184,7 +200,8 @@ function changePassword(call,callback){
     else{
       serviceProvider.comparePassword(call.request.oldpassword,(err,isMatch)=>{
       if(err){
-        callback(' internal error :password matching Problem',{
+        callback(null,{
+          error:true,
           code: 500 ,
           message:' internal error :password matching Problem'
         });
@@ -192,13 +209,15 @@ function changePassword(call,callback){
         if(isMatch){
           serviceProvider.password = call.request.newpassword;
           serviceProvider.save();
-          callback(null,{
+          callback(null,{ 
+            error:false,
             message: 'Password Changed',
             code : 200,
           });
         }
         else{
-          callback(' internal error : Incorrect Password',{
+          callback(null,{
+            error:true,
             code: 403,
             message: ' internal error : Incorrect Password'
           });
@@ -209,17 +228,19 @@ function changePassword(call,callback){
 
     }
   }).catch((err)=>{
-    callback(err.message,{
+    callback(null,{
+      error:true,
       code : 404,
-      message : err.message,
+      message : "Internal Error",
     });
   });
 }
 catch(err)
 {
-  callback(err.message,{
+  callback(null,{
+    error:true,
     code: 500,
-    message:err.message
+    message:"Internal Error"
   });
 }
 }
@@ -229,7 +250,7 @@ function forgetPassword(call,callback){
   let token = tokengen.generate();
   redisClient.set(token,call.request.email);
   emailClient.sendTokenEmail(call.request.email,token);
-  callback(null,{token:token});
+  callback(null,{ error:false,token:token});
   
 }
 
@@ -237,7 +258,8 @@ function forgetPassword(call,callback){
 function resetPassword(call,callback){
   redisClient.get(call.request.token,(error, result) => {
     if (error) {
-      callback( 'Not Found',{
+      callback( null,{
+        error:true,
         code: 404,
         message: 'Not Found'
       })
@@ -248,14 +270,16 @@ function resetPassword(call,callback){
         serviceProvider.password = call.request.newpassword;
         serviceProvider.status='active';
         serviceProvider.save();
-        callback(null,{
+        callback(null,{ 
+          error:false,
           code : 200 ,
           message:'Password Reseted'
         });
       }).catch((err)=>{
-        callback(err.message,{
+        callback(null,{
+          error:true,
           code : 404,
-          message : err.message,
+          message : "Internal Error",
         });
       });
     }
@@ -272,12 +296,14 @@ function verify(call,callback){
           serviceProvider.status='active';
           serviceProvider.save();
         }
-        callback(null,{
+        callback(null,{ 
+          error:false,
           code : 200,
           message:'Account Activated '
         });
       }).catch((err)=>{
-        callback('Not Found',{
+        callback(null,{
+          error:true,
           code : 404,
           message:'Not Found '
         });
@@ -297,7 +323,8 @@ function getMe(call,callback){
 
     serviceProvider.save()
       .then(() =>{ 
-        callback(null,{
+        callback(null,{ 
+          error:false,
         code: 200,
         message: 'ServiceProvider found',
         fullname:serviceProvider.fullname,
@@ -308,16 +335,18 @@ function getMe(call,callback){
         });
       });
     }).catch((err)=>{
-      callback(err.message,{
+      callback(null,{
+        error:true,
         code : 404,
-        message : err.message,
+        message : "Internal Error",
       });
     });
   
 }catch(err){
-  callback(err.message,{
+  callback(null,{
+    error:true,
     code: 500 ,
-    message: err.message
+    message: "Internal Error"
   });}
 }
 
@@ -333,14 +362,16 @@ function getSuggestedSP(call,callback){
             "distanceField": "distance",
             "spherical": true,
             "maxDistance": 1000
-        }}
+        }},
+        { "$sort" : { "rate" : -1 } }
     ],
   ).then((e)=>{
-    callback(null,{
+    callback(null,{ 
+      error:false,
       code: 200,
       message :"Request Sent",
     });
-    callback(e);
+    ////////////callback(e);
   });
   
 }

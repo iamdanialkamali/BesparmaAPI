@@ -1,5 +1,0 @@
-let  Services = {
-
-    id:,
-    name,
-};
