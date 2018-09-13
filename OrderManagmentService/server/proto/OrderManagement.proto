@@ -1,0 +1,84 @@
+
+package OrderManagement; //Optional: unique package name.
+
+//Service. define the methods that the grpc server can expose to the client.
+service orderManagementService {
+  rpc addOrder       (addOrderRequest)        returns (addOrderResponse);
+  rpc update         (UpdateRequest)          returns (SimpleResponse);
+  rpc remove         (SimpleTokenBaseRequest) returns (SimpleResponse);
+  rpc getOrder       (SimpleTokenBaseRequest) returns (getMeResponse);
+  rpc addApplicant /* manam bazi*/  (ProviderData)           returns (SimpleResponse);
+  rpc orderService   (ServiceData)            returns (TokenBaseData);     
+  rpc getApplicants  (TokenBaseData)          returns (ApplicantsResponse);
+  rpc confirmOrder   (TokenBaseData)          returns (OrderResponse);
+  ////rpc sendNotifProviders
+  ////rpc sendNotifCustomers
+
+}
+
+message LocationBaseRequset{
+
+  repeated int32 location = 1 [packed=true];
+
+}
+
+message SimpleResponse {
+  int32  code    = 1;
+  string message = 2;
+}
+
+message VerifyRequest{
+  string id      = 1;
+}
+
+message SimpleTokenBaseRequest{
+  string token = 1;
+}
+
+message ResetPasswordRequest{
+  string token = 1;
+  string new_password =2;
+}
+
+message addOrderRequest {
+  repeated int32 service_id = 1 ;
+  int32  cost               = 2 ;
+  string datetime           = 3 ;
+  int32  provider_id        = 4 ;
+  int32  customer_id        = 5 ;
+  float  rate               = 6 ;
+  repeated float location   = 7  [packed=true] ;
+  }
+
+message addOrderResponse {
+  int32  code        = 1;
+  string message     = 2;
+  string token       = 3;
+  
+  
+}
+
+message UpdateRequest {
+  repeated int32 serviceId = 1 ;
+  int32  cost               = 2 ;
+  string datetime           = 3 ;
+  int32  providerId        = 4 ;
+  int32  customerId        = 5 ;
+  float  rate               = 6 ;
+  repeated float location   = 7  [packed=true] ;
+  string token              = 10 ;
+}
+
+
+message addOrderResponse {  
+  repeated string service_id = 1 ;
+  int32  cost               = 2 ;
+  string datetime           = 3 ;
+  int32  provider        = 4 ;
+  float  rate               = 6 ;
+  repeated float location   = 7  [packed=true] ;
+  string message = 8;
+  int32 code = 9;
+}
+
+// Message Type definition for LeaveFeedback response.

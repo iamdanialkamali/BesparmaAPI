@@ -1,21 +1,20 @@
 syntax = "proto3"; //Specify proto3 version.
 
-package Customer; //Optional: unique package name.
+package serviceProvider; //Optional: unique package name.
 
 //Service. define the methods that the grpc server can expose to the client.
-service customerManagementService {
+service serviceProviderManagementService {
   rpc register       (RegisterRequest)        returns (RegisterResponse);
   rpc login          (LoginRequest)           returns (LoginResponse);
   rpc forgetPassword (ForgetPasswordRequest)  returns (SimpleResponse);
   rpc update         (UpdateRequest)          returns (SimpleResponse);
   rpc remove         (SimpleTokenBaseRequest) returns (SimpleResponse);
-  rpc verify         (SimpleTokenBaseRequest) returns (SimpleResponse);
+  rpc verify         (VerifyRequest)          returns (SimpleResponse);
   rpc resetPassword  (ResetPasswordRequest)   returns (SimpleResponse);
   rpc changePassword (ChangePasswordRequest)  returns (SimpleResponse);
   rpc getMe          (SimpleTokenBaseRequest) returns (getMeResponse);
   
- // rpc orderService (User) returns (LegalAge);  TODO:   after making  serviceManagemnetService
- // rpc getApplicant (User) returns (LegalAge);   TODO:   after making  serviceProviderManagemnetService
+ // rpc setApplicant (User) returns (LegalAge);  TODO:   after making  serviceManagemnetService
   
 }
 
@@ -23,12 +22,14 @@ service customerManagementService {
 message SimpleResponse {
   int32  code    = 1;
   string message = 2;
-  bool   error   = 3;
+}
+
+message VerifyRequest{
+  string id      = 1;
 }
 
 message SimpleTokenBaseRequest{
   string token = 1;
-
 }
 
 message ResetPasswordRequest{
@@ -37,19 +38,24 @@ message ResetPasswordRequest{
 }
 
 message RegisterRequest {
-  string fullname    = 1;
-  string email        = 2;
-  string phonenumber = 3;
-  string username     = 4;
-  string password     = 5;
+  string fullname        = 1 ;
+  string email           = 2 ;
+  string phonenumber     = 3 ;
+  string username        = 4 ;
+  string password        = 5 ;
+  string degree          = 6 ;
+  string nationalCode    = 7 ;
+  bool   marrige         = 8 ;
+  string address         = 9 ;
+  int32  age             = 10; 
+  string homePhonenumber = 11;
 }
 
 message RegisterResponse {
   int32  code        = 1;
   string message     = 2;
   string token       = 3;
-  string userstatus  = 4;
-  bool   error       = 5;
+  string status      = 4;
   
 }
 
@@ -62,7 +68,6 @@ message LoginResponse {
   int32  code    = 1;
   string message = 2;
   string token   = 3;
-  bool   error   = 4;
 }
 
 message ForgetPasswordRequest{
@@ -70,10 +75,16 @@ message ForgetPasswordRequest{
 }
 
 message UpdateRequest {
-  string fullname    = 1;
-  string phonenumber = 2;
-  string username     = 3;
-  string token        = 4;
+  string fullname        = 1 ;
+  string phonenumber     = 2 ;
+  string username        = 3 ;
+  string degree          = 4 ;
+  string nationalCode    = 5 ;
+  bool   marrige         = 6 ;
+  string address         = 7 ;
+  int32  age             = 8 ; 
+  string homePhonenumber = 9 ;
+  string token           = 10;
 }
 
 message ChangePasswordRequest {
@@ -83,14 +94,20 @@ message ChangePasswordRequest {
 }
 
 message getMeResponse {
-  int32  code         = 1;
-  string message      = 2;
-  string fullname     = 3;
-  string email        = 4;
-  string phonenumber  = 5;
-  string username     = 6;
-  string status       = 7;
-  bool   error        = 8;
+  string fullname        = 1 ;
+  string email           = 2 ;
+  string phonenumber     = 3 ;
+  string username        = 4 ;
+  string password        = 5 ;
+  string degree          = 6 ;
+  string nationalCode    = 7 ;
+  bool   marrige         = 8 ;
+  string address         = 9 ;
+  int32  age             = 10; 
+  string homePhonenumber = 11;
+  string status          = 12;
+  int32  code            = 13;
+  string message         = 14;
 }
 
 // Message Type definition for LeaveFeedback response.
