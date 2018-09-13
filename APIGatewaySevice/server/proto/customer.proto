@@ -10,9 +10,8 @@ service customerManagementService {
   rpc update         (UpdateRequest)          returns (SimpleResponse);
   rpc remove         (SimpleTokenBaseRequest) returns (SimpleResponse);
   rpc verify         (SimpleTokenBaseRequest) returns (SimpleResponse);
-  rpc resetPassword  (ResetPasswordRequest) returns (SimpleResponse);
+  rpc resetPassword  (ResetPasswordRequest)   returns (SimpleResponse);
   rpc changePassword (ChangePasswordRequest)  returns (SimpleResponse);
-  
   rpc getMe          (SimpleTokenBaseRequest) returns (getMeResponse);
   
  // rpc orderService (User) returns (LegalAge);  TODO:   after making  serviceManagemnetService
@@ -24,10 +23,12 @@ service customerManagementService {
 message SimpleResponse {
   int32  code    = 1;
   string message = 2;
+  bool   error   = 3;
 }
 
 message SimpleTokenBaseRequest{
   string token = 1;
+
 }
 
 message ResetPasswordRequest{
@@ -37,17 +38,18 @@ message ResetPasswordRequest{
 
 message RegisterRequest {
   string fullname    = 1;
-  string email       = 2;
+  string email        = 2;
   string phonenumber = 3;
-  string username    = 4;
-  string password    = 5;
+  string username     = 4;
+  string password     = 5;
 }
 
 message RegisterResponse {
   int32  code        = 1;
   string message     = 2;
   string token       = 3;
-  string userstatus = 4;
+  string userstatus  = 4;
+  bool   error       = 5;
   
 }
 
@@ -60,6 +62,7 @@ message LoginResponse {
   int32  code    = 1;
   string message = 2;
   string token   = 3;
+  bool   error   = 4;
 }
 
 message ForgetPasswordRequest{
@@ -80,13 +83,14 @@ message ChangePasswordRequest {
 }
 
 message getMeResponse {
-  int32  code        = 1;
-  string message     = 2;
-  string fullname    = 3;
-  string email       = 4;
-  string phonenumber = 5;
-  string username    = 6;
-  string status      = 7;
+  int32  code         = 1;
+  string message      = 2;
+  string fullname     = 3;
+  string email        = 4;
+  string phonenumber  = 5;
+  string username     = 6;
+  string status       = 7;
+  bool   error        = 8;
 }
 
 // Message Type definition for LeaveFeedback response.
