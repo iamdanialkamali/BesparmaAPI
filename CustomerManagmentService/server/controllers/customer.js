@@ -44,9 +44,9 @@ function login (call,callback){
     username:call.request.username
   }).exec().then((customer)=>{
     if(!customer){
-      callback('user not found',
+      callback(null,
       {
-        error:false,
+        error:true,
         code: 404 ,
         message:'username not found' })
       }
