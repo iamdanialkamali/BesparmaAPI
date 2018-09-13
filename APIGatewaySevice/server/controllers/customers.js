@@ -18,7 +18,7 @@ function register(req, res, next) {
 
     client.register(message , (error, data) => {
         try {
-            if (error) res.status(data.code).send(data.message)
+            if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({
                 message: data.message,
                 token: data.token})}
@@ -38,7 +38,7 @@ function login(req, res, next) {
 
     client.login(message,(error, data) => {
         try{
-            if (error) res.status(data.code).send(data.message)
+            if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({
                 message: data.message,
                 token: data.token})
@@ -57,7 +57,7 @@ function forgetPassword(req, res, next) {
 
     client.forgetPassword(message, (error, data) => {
         try{
-            if (error) res.status(data.code).send(data.message)
+            if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({ message: data.message })
         }
         catch(exeption) {
@@ -78,7 +78,7 @@ function update(req, res, next) {
     
     client.update(message, (error, data) => {
         try{
-            if (error) res.status(data.code).send(data.message)
+            if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({ message: data.message })
         }
         catch(exeption) {
@@ -93,7 +93,7 @@ function remove(req, res, next) {
 
     client.remove(message, (error, data) => {
         try{
-            if (error) res.status(data.code).send(data.message)
+            if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({ message: data.message })
         }
         catch(exeption) {
@@ -110,7 +110,7 @@ function verify(req, res, next){
 
     client.verify(message, (error, data) => {
         try{
-            if (error) res.status(data.code).send(data.message)
+            if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({ message: data.message })
         }
         catch(exeption) {
@@ -129,7 +129,7 @@ function resetPassword(req, res, next) {
     
     client.resetPassword(message, (error, data) => {
         try{
-            if (error) res.status(data.code).send(data.message)
+            if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({ message: data.message })
         }
         catch(exeption) {
@@ -148,7 +148,7 @@ function changePassword(req, res, next) {
   
     client.changePassword(message, (error, data) => {
         try{
-            if (error) res.status(data.code).send(data.message)
+            if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({ message: data.message })
         }
         catch(exeption) {
@@ -164,7 +164,7 @@ function getMe(req, res, next) {
     
     client.getMe(message, (error, data) => {
         try{
-            if (error) res.status(data.code).send(data.message)
+            if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({ 
                 message: data.message,
                 fullname: data.fullname,
@@ -186,7 +186,7 @@ function getSuggestedSPs(req, res, next) {
 
     client.getSuggestedSPs(message, (error,data) => {
         try{
-            if (error) res.status(data.code).send(data.message)
+            if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({ message: data.message })
         }
         catch(exeption) {
