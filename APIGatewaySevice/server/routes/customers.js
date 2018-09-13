@@ -4,7 +4,7 @@ import validate from 'express-validation'
 import validations  from './validation/customers'
 
 import customerCtrl from '../controllers/customers'
-import serviceProviderCtrl from '../controllers/serviceProvider'
+import serviceProviderCtrl from '../controllers/serviceProviders'
 import auth from '../../config/jwt';
 
 console.log(serviceProviderCtrl)
@@ -278,8 +278,8 @@ router.route('/getMe')
   .get(customerCtrl.getToken, customerCtrl.getMe)
 
 
-router.route('/getSuggestedServiceProviders')
+// router.route('/getSuggestedServiceProviders')
 
-  .get(validate(validations.getSuggestedSPs), customerCtrl.getSuggestedSPs)
+//   .get(validate(validations.getSuggestedSPs), customerCtrl.getSuggestedSPs)
   
 export default router

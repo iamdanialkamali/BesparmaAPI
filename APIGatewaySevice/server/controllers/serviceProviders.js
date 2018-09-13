@@ -13,9 +13,15 @@ function register(req, res, next) {
         email: req.body.email,
         phonenumber: req.body.phonenumber,
         username: req.body.username,
-        password: req.body.password
+        password: req.body.password,
+        degree: req.body.degree,
+        nationalCode: req.body.nationalCode,
+        marriage: req.body.marriage,
+        address: req.body.address,
+        age: req.body.age,
+        homePhonenumber: req.body.homePhonenumber
     }
-
+    
     client.register(message , (error, data) => {
         try {
             if (data.error) res.status(data.code).send(data.message)
@@ -26,7 +32,6 @@ function register(req, res, next) {
             res.status(500).send({message: "Internal server error"})
         }
       })
-    
 }
 
 
@@ -36,7 +41,7 @@ function login(req, res, next) {
         password: req.body.password
     }
 
-    client.login(message,(error, data) => {
+    client.login(message,(error, data) =>{
         try{
             if (data.error) res.status(data.code).send(data.message)
             res.status(data.code).send({
@@ -46,6 +51,7 @@ function login(req, res, next) {
         catch(exeption) {
           res.status(500).send({message: "Internal server error"})
         }
+
     })
 }
 
@@ -70,12 +76,17 @@ function forgetPassword(req, res, next) {
 
 function update(req, res, next) {
     const message = {
-        token: req.user.token,
-        fullname: req.body.fullname,
+        fullname : req.body.fullname,
         phonenumber: req.body.phonenumber,
-        username: req.body.username
+        username: req.body.username,
+        degree: req.body.degree,
+        nationalCode: req.body.nationalCode,
+        marriage: req.body.marriage,
+        address: req.body.address,
+        age: req.body,age,
+        homePhonenumber: req.body.homePhonenumber
     }
-    
+
     client.update(message, (error, data) => {
         try{
             if (data.error) res.status(data.code).send(data.message)
@@ -126,7 +137,7 @@ function resetPassword(req, res, next) {
       token   : req.token,
       password: req.body.password  
     }
-    
+
     client.resetPassword(message, (error, data) => {
         try{
             if (data.error) res.status(data.code).send(data.message)
@@ -137,6 +148,7 @@ function resetPassword(req, res, next) {
         }
     })
 }
+
 
 
 function changePassword(req, res, next) {
@@ -155,7 +167,7 @@ function changePassword(req, res, next) {
           res.status(500).send({message: "Internal server error"})
         }
     })
-  }
+}
 
 
 
@@ -179,22 +191,7 @@ function getMe(req, res, next) {
         }
     })
 }
- 
-function getSuggestedSPs(req, res, next) {
-    const message = { location : req.body.location }
+  
 
-    client.getSuggestedSPs(message, (error,data) => {
-        try{
-            if (data.error) res.status(data.code).send(data.message)
-            res.status(data.code).send({ message: data.message })
-        }
-        catch(exeption) {
-          res.status(500).send({message: "Internal server error"})
-        }
-    })
-    
-}
-
-
-export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, verify, getToken, getSuggestedSPs }
+export default { register, login, forgetPassword, update, remove, resetPassword, changePassword, getMe, getToken, verify }
 

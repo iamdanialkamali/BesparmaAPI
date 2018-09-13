@@ -1,7 +1,7 @@
 import express  from 'express'
 import validate from 'express-validation'
 
-import serviceProvideCtrl from '../controllers/serviceProviders'
+import serviceProviderCtrl from '../controllers/serviceProviders'
 import validations  from './validation/serviceProviders'
 import auth from '../../config/jwt';
 
